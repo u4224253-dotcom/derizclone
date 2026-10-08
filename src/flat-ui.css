@@ -859,3 +859,34 @@ html[data-uistyle="flat"] .mp__profcat > .mp__ava:first-child{color:var(--flat-p
 html[data-uistyle="flat"] .mp__open:hover,
 html[data-uistyle="flat"] .mp__open:focus-visible{background:var(--flat-pal-orange-hi)}
 /* baris skala / nada: dipakai plugin & piano roll nanti; token tersedia lewat --flat-pal-teal-soft / --flat-pal-orange-note */
+
+/* ================================================================================================
+   PATTERN (clip di playlist): token --flat-pat-* + gaya. Warna isi pattern = warna track (--track-color).
+   Pilihan warna track untuk Flat ada di src/ui-theme.ts (FLAT_TRACK_COLORS: oranye, teal, ungu, pink, biru, merah, kuning, mauve) = palet gambar referensi.
+   ================================================================================================ */
+html[data-uistyle="flat"]{
+  --flat-pat-head:color-mix(in srgb,var(--flat-pal-key) 32%,transparent);   /* strip judul: lebih terang dari isi */
+  --flat-pat-head-text:var(--flat-pal-ink);
+  --flat-pat-edge:color-mix(in srgb,var(--flat-pal-ink) 28%,transparent);   /* garis tepi tipis */
+  --flat-pat-bar:color-mix(in srgb,var(--flat-pal-ink) 12%,transparent);    /* garis bar di dalam pattern */
+  --flat-pat-select:var(--flat-pal-ink);                                    /* bingkai pattern terpilih */
+  --flat-pat-handle:var(--flat-pal-key);                                    /* pegangan resize */
+  --flat-pat-handle-edge:var(--flat-pal-ink);
+  --flat-pat-shadow:rgba(40,38,38,.35);
+}
+html[data-uistyle="flat"] .pattern{border-radius:var(--flat-r-lg);
+  background-image:linear-gradient(90deg,var(--flat-pat-bar) 1px,transparent 1px);
+  box-shadow:inset 0 0 0 1px var(--flat-pat-edge);animation:none;transition:background-color .15s ease}
+html[data-uistyle="flat"] .pattern:hover{filter:none;box-shadow:inset 0 0 0 1px var(--flat-pat-select)}
+html[data-uistyle="flat"] .pattern__head{border-radius:var(--flat-r-lg) var(--flat-r-lg) 0 0;background:var(--flat-pat-head);color:var(--flat-pat-head-text);font-weight:600}
+html[data-uistyle="flat"] .pattern__title{animation:none}
+html[data-uistyle="flat"] .pattern__head::before{animation:none}
+html[data-uistyle="flat"] .pattern::after{border:2px solid var(--flat-pat-select);border-radius:var(--flat-r-lg)}
+html[data-uistyle="flat"] .pattern.is-dragging{filter:none;transform:none;box-shadow:inset 0 0 0 1px var(--flat-pat-select),0 4px 12px var(--flat-pat-shadow)}
+html[data-uistyle="flat"] .pattern.is-settling{transition:left .15s ease,background-color .15s ease}
+html[data-uistyle="flat"] .pattern.is-snapping{transition:width .15s ease,background-color .15s ease}
+/* pegangan resize: bulat jadi kotak kecil membulat tipis */
+html[data-uistyle="flat"] .pattern__handle::before{border-radius:var(--flat-r);background:var(--flat-pat-handle);border:1px solid var(--flat-pat-handle-edge);box-shadow:none}
+html[data-uistyle="flat"] .pattern.is-resizing .pattern__handle::before,
+html[data-uistyle="flat"] .pattern.is-selected .pattern__handle:active::before{box-shadow:none;transform:scale(1.1)}
+html[data-uistyle="flat"] .pattern.is-selected .pattern__handle:hover::before{transform:scale(1.08)}

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { ivkDock, ivkSetCaps } from './ivory-keys';
-import { uiTheme, syncTrackColors } from './ui-theme';
+import { uiTheme, syncTrackColors, instColor } from './ui-theme';
 import '@fontsource/syncopate/700.css';   // font judul plugin DERIZ (dibundel, tidak butuh internet)
 import '@fontsource/plus-jakarta-sans/latin-400.css';   // font gelembung tutorial (dibundel, tidak butuh internet)
 import '@fontsource/plus-jakarta-sans/latin-600.css';
@@ -1470,7 +1470,8 @@ setMgchordBridge({
 }
 // ===== Menu "Tambahkan track" =====
 const INSTRUMENTS = [
-  {n:'Audio clip', c:'#14b8a6'}, {n:'Supersaw', c:'#5b3de8'}, {n:'DERIZ', c:'#22c7e8'}, {n:'Drums', c:'#f59e0b'}
+  {n:'Audio clip', get c() { return instColor('Audio clip', '#14b8a6'); }}, {n:'Supersaw', get c() { return instColor('Supersaw', '#5b3de8'); }},
+  {n:'DERIZ', get c() { return instColor('DERIZ', '#22c7e8'); }}, {n:'Drums', get c() { return instColor('Drums', '#f59e0b'); }}   // warna mengikuti Gaya UI (Flat = palet referensi)
 ].filter(t => !(DRUMS_HIDDEN && t.n === 'Drums'));   // Drums disembunyikan (lihat DRUMS_HIDDEN di drums.ts)
 let addMenu = null, addBtn = null;
 let trackSeq = Math.max(1, ...[...document.querySelectorAll('.trkcard-wrap')].map(c => +c.dataset.track));
