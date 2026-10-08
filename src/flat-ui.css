@@ -17,6 +17,9 @@
 /* ---------- 0. Palet dasar Flat (dari src/palettes.ts: "Studio Netral" + Klasik/Redam untuk status) ----------
    Hanya nilai mentah. Token --flat-* / --flat-pl-* di bawah merujuk ke sini; untuk ganti warna Flat cukup ubah baris ini atau pemetaan tokennya. */
 html[data-uistyle="flat"]{
+  --flat-r:4px;        /* sudut membulat tipis: tombol, input, switch, item menu (referensi: Ableton Live) */
+  --flat-r-lg:6px;     /* card, panel, dialog, menu mengambang */
+  --flat-r-xs:2px;     /* penanda kecil (lampu status, titik) */
   --flat-pal-ink:#1C1D1F;      /* Studio: Hitam */
   --flat-pal-grip:#55585D;     /* Studio: Grip */
   --flat-pal-text:#8A8D92;     /* Studio: Teks */
@@ -75,7 +78,7 @@ html[data-uistyle="flat"] .tracklist{
 html[data-uistyle="flat"] .tracklist .trkcard-wrap{padding:0;border-bottom:1px solid var(--flat-line)}
 
 /* tombol panah tutup panel & auto scroll di strip atas */
-html[data-uistyle="flat"] .tracklist .panel-toggle{border-radius:0;background:var(--flat-ctrl);color:var(--flat-text);transition:background-color .15s ease,color .15s ease}
+html[data-uistyle="flat"] .tracklist .panel-toggle{border-radius:var(--flat-r);background:var(--flat-ctrl);color:var(--flat-text);transition:background-color .15s ease,color .15s ease}
 html[data-uistyle="flat"] .tracklist .panel-toggle:hover{background:var(--flat-ctrl-hover);transform:none}
 html[data-uistyle="flat"] .tracklist .panel-toggle:active{transform:none}
 html[data-uistyle="flat"] .tracklist .autoscroll-toggle{color:var(--flat-muted)}
@@ -83,7 +86,7 @@ html[data-uistyle="flat"] .tracklist .autoscroll-toggle[aria-checked="true"]{col
 
 /* ---------- 3. Card track ---------- */
 html[data-uistyle="flat"] .tracklist .trkcard,
-html[data-uistyle="flat"] .tracklist .trkcard--on{border-radius:0;box-shadow:none;background-color:var(--flat-card);color:var(--flat-text);transition:background-color .15s ease}
+html[data-uistyle="flat"] .tracklist .trkcard--on{border-radius:var(--flat-r);box-shadow:none;background-color:var(--flat-card);color:var(--flat-text);transition:background-color .15s ease}
 html[data-uistyle="flat"] .tracklist .trkcard::before,
 html[data-uistyle="flat"] .tracklist .trkcard::after{display:none}   /* outline gradien + kilau "glass" dimatikan */
 html[data-uistyle="flat"] .tracklist .trkcard:not(.trkcard--on):hover{background-color:var(--flat-card-hover)}
@@ -98,27 +101,27 @@ html[data-uistyle="flat"] .tracklist .trkcard-wrap.is-reordering .trkcard{transf
 html[data-uistyle="flat"] .tracklist .trkcard__title-btn{color:var(--flat-text)}
 
 /* icon instrumen: kotak warna track */
-html[data-uistyle="flat"] .tracklist .trkcard__inst{border-radius:0;background:var(--track-color,var(--flat-accent));color:var(--flat-on-color)}
+html[data-uistyle="flat"] .tracklist .trkcard__inst{border-radius:var(--flat-r);background:var(--track-color,var(--flat-accent));color:var(--flat-on-color)}
 html[data-uistyle="flat"] .tracklist .trkcard__lead:hover .trkcard__inst,
 html[data-uistyle="flat"] .tracklist .trkcard__lead:active .trkcard__inst{transform:none}
 html[data-uistyle="flat"] .tracklist .trkcard__lead.is-reorder-ready .trkcard__inst{transform:none;box-shadow:0 0 0 2px var(--flat-card),0 0 0 4px var(--track-color,var(--flat-accent))}
 
 /* lampu on/off: kotak datar */
-html[data-uistyle="flat"] .tracklist .trkcard__power{width:10px;height:10px;border-radius:0;background:var(--flat-ok);box-shadow:none}
+html[data-uistyle="flat"] .tracklist .trkcard__power{width:10px;height:10px;border-radius:var(--flat-r);background:var(--flat-ok);box-shadow:none}
 html[data-uistyle="flat"] .tracklist .trkcard__power[aria-checked="false"]{background:var(--flat-off);box-shadow:none}
 
 /* titik tiga */
-html[data-uistyle="flat"] .tracklist .ico-btn{border-radius:0;color:var(--flat-muted)}
+html[data-uistyle="flat"] .tracklist .ico-btn{border-radius:var(--flat-r);color:var(--flat-muted)}
 html[data-uistyle="flat"] .tracklist .ico-btn:hover{background:var(--flat-ctrl);color:var(--flat-text)}
 html[data-uistyle="flat"] .tracklist .ico-btn[aria-expanded="true"]{background:var(--flat-ctrl-hover);color:var(--flat-text)}
 
 /* tombol S (solo) */
-html[data-uistyle="flat"] .tracklist .trkcard__arm{border-radius:0;border:0;background:var(--flat-ctrl);color:var(--flat-text)}
+html[data-uistyle="flat"] .tracklist .trkcard__arm{border-radius:var(--flat-r);border:0;background:var(--flat-ctrl);color:var(--flat-text)}
 html[data-uistyle="flat"] .tracklist .trkcard__arm:hover{background:var(--flat-ctrl-hover)}
 html[data-uistyle="flat"] .tracklist .trkcard__arm[aria-checked="true"]{background:var(--flat-solo);color:var(--flat-text)}
-html[data-uistyle="flat"] .tracklist .trkcard__arm i{border-radius:0}
+html[data-uistyle="flat"] .tracklist .trkcard__arm i{border-radius:var(--flat-r)}
 html[data-uistyle="flat"] .tracklist .sm,
-html[data-uistyle="flat"] .tracklist .sm__btn{border-radius:0;color:var(--flat-text)}
+html[data-uistyle="flat"] .tracklist .sm__btn{border-radius:var(--flat-r);color:var(--flat-text)}
 
 /* knob pan: tetap bulat (itu bentuk knob), warnanya terang */
 html[data-uistyle="flat"] .tracklist .trkcard__pan .circle-inner{fill:var(--flat-ctrl-strong)}
@@ -126,19 +129,19 @@ html[data-uistyle="flat"] .tracklist .trkcard__pan .knob-pos{stroke:var(--flat-t
 
 /* slider volume: rel tipis, isi = warna track, thumb kotak */
 html[data-uistyle="flat"] .tracklist .trkcard__vol .slider{background:linear-gradient(var(--flat-muted),var(--flat-muted)) calc(66.667% - 1.2px) 50%/1px 12px no-repeat}
-html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-webkit-slider-runnable-track{height:4px;border-radius:0;
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-webkit-slider-runnable-track{height:4px;border-radius:var(--flat-r);
   background:linear-gradient(var(--track-color,var(--flat-accent)),var(--track-color,var(--flat-accent))) 0 0/calc((100% - 8px) * var(--slider-progress-fraction,.667) + 4px) 4px no-repeat,var(--flat-track)}
-html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-track{height:4px;border-radius:0;background:var(--flat-track)}
-html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-progress{height:4px;border-radius:0;background:var(--track-color,var(--flat-accent))}
-html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-webkit-slider-thumb{margin-top:-8px;border-radius:0;background:var(--flat-text);box-shadow:none}
-html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-thumb{border-radius:0;background:var(--flat-text)}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-track{height:4px;border-radius:var(--flat-r);background:var(--flat-track)}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-progress{height:4px;border-radius:var(--flat-r);background:var(--track-color,var(--flat-accent))}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-webkit-slider-thumb{margin-top:-8px;border-radius:var(--flat-r);background:var(--flat-text);box-shadow:none}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-thumb{border-radius:var(--flat-r);background:var(--flat-text)}
 html[data-uistyle="flat"] .tracklist .trkcard__vol .slider:hover::-webkit-slider-thumb,
 html[data-uistyle="flat"] .tracklist .trkcard__vol .slider:active::-webkit-slider-thumb{transform:none;background:var(--flat-text)}
 html[data-uistyle="flat"] .tracklist .trkcard__vol .slider:hover::-moz-range-thumb,
 html[data-uistyle="flat"] .tracklist .trkcard__vol .slider:active::-moz-range-thumb{transform:none;background:var(--flat-text)}
 
 /* meter level: warna solid bertingkat, tanpa glow */
-html[data-uistyle="flat"] .tracklist .trackmeter{border-radius:0;background:var(--flat-meter-bg);box-shadow:none}
+html[data-uistyle="flat"] .tracklist .trackmeter{border-radius:var(--flat-r);background:var(--flat-meter-bg);box-shadow:none}
 html[data-uistyle="flat"] .tracklist .trackmeter::before{background:var(--flat-line)}
 html[data-uistyle="flat"] .tracklist .trackmeter__bar,
 html[data-uistyle="flat"] .tracklist .trackmeter__bar[data-l="2"],
@@ -149,21 +152,21 @@ html[data-uistyle="flat"] .tracklist .trackmeter__bar s{filter:none;
   background:linear-gradient(to top,var(--flat-meter-ok) 0 70%,var(--flat-meter-warn) 70% 88%,var(--flat-meter-clip) 88% 100%)}
 
 /* tombol tambah track */
-html[data-uistyle="flat"] .tracklist .addtrack{border-radius:0;margin:0;width:100%;background:var(--flat-card);color:var(--flat-text);border:0;border-bottom:1px solid var(--flat-line)}
+html[data-uistyle="flat"] .tracklist .addtrack{border-radius:var(--flat-r);margin:0;width:100%;background:var(--flat-card);color:var(--flat-text);border:0;border-bottom:1px solid var(--flat-line)}
 html[data-uistyle="flat"] .tracklist .addtrack:hover{background:var(--flat-ctrl);color:var(--flat-text)}
 
 /* fokus keyboard */
 html[data-uistyle="flat"] .tracklist :is(button,[role="slider"],input):focus-visible{outline:2px solid var(--flat-focus);outline-offset:-2px}
 
 /* ---------- 4. Menu titik tiga track (kelas .mixer-menu dipasang di main.ts; menu piano roll / efek / pattern tidak ikut) ---------- */
-html[data-uistyle="flat"] .track-menu.mixer-menu{border-radius:0;background:var(--flat-card);border:1px solid var(--flat-line);color:var(--flat-text);box-shadow:0 4px 12px var(--flat-shadow)}
-html[data-uistyle="flat"] .mixer-menu .track-menu__item{border-radius:0;color:var(--flat-text)}
+html[data-uistyle="flat"] .track-menu.mixer-menu{border-radius:var(--flat-r);background:var(--flat-card);border:1px solid var(--flat-line);color:var(--flat-text);box-shadow:0 4px 12px var(--flat-shadow)}
+html[data-uistyle="flat"] .mixer-menu .track-menu__item{border-radius:var(--flat-r);color:var(--flat-text)}
 html[data-uistyle="flat"] .mixer-menu .track-menu__item:hover,
 html[data-uistyle="flat"] .mixer-menu .track-menu__item:focus-visible{background:var(--flat-ctrl);transform:none}
 html[data-uistyle="flat"] .mixer-menu .track-menu__item--danger{color:var(--flat-danger)}
 html[data-uistyle="flat"] .mixer-menu .track-menu__item[aria-expanded="true"]{background:var(--flat-ctrl-hover)}
 html[data-uistyle="flat"] .mixer-menu .track-menu__dot,
-html[data-uistyle="flat"] .mixer-menu .track-menu__swatch{border-radius:0}
+html[data-uistyle="flat"] .mixer-menu .track-menu__swatch{border-radius:var(--flat-r)}
 html[data-uistyle="flat"] .mixer-menu .track-menu__swatch:hover,
 html[data-uistyle="flat"] .mixer-menu .track-menu__swatch:focus-visible{border-color:var(--flat-text);transform:none}
 
@@ -267,28 +270,28 @@ html[data-uistyle="flat"] .fx__panel{background:var(--flat-fx-bg);border-left:1p
 html[data-uistyle="flat"] .fx__head{background:var(--flat-fx-head);border-bottom:1px solid var(--flat-fx-line)}
 html[data-uistyle="flat"] .fx__title{color:var(--flat-fx-text)}
 
-html[data-uistyle="flat"] .fx__pages{border-radius:0;background:var(--flat-fx-inset);border:1px solid var(--flat-fx-line)}
-html[data-uistyle="flat"] .fx__pages::before{border-radius:0;background:var(--flat-fx-card);box-shadow:inset 0 -2px 0 var(--flat-fx-accent)}
-html[data-uistyle="flat"] .fx__page{border-radius:0;color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fx__pages{border-radius:var(--flat-r);background:var(--flat-fx-inset);border:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .fx__pages::before{border-radius:var(--flat-r);background:var(--flat-fx-card);box-shadow:inset 0 -2px 0 var(--flat-fx-accent)}
+html[data-uistyle="flat"] .fx__page{border-radius:var(--flat-r);color:var(--flat-fx-muted)}
 html[data-uistyle="flat"] .fx__page:hover,
 html[data-uistyle="flat"] .fx__page[aria-selected="true"]{color:var(--flat-fx-text)}
 html[data-uistyle="flat"] .fx__page:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:-2px}
 
 /* tombol +: kotak solid, tanpa bayangan & tanpa membesar */
-html[data-uistyle="flat"] .fx__add{border-radius:0;background:var(--flat-fx-strong);color:var(--flat-fx-on-strong);box-shadow:none;transition:background-color .15s ease,opacity .2s ease}
+html[data-uistyle="flat"] .fx__add{border-radius:var(--flat-r);background:var(--flat-fx-strong);color:var(--flat-fx-on-strong);box-shadow:none;transition:background-color .15s ease,opacity .2s ease}
 html[data-uistyle="flat"] .fx__add:hover{transform:none;box-shadow:none;background:var(--flat-fx-accent);color:var(--flat-fx-on-accent)}
 html[data-uistyle="flat"] .fx__add:active{transform:none}
 html[data-uistyle="flat"] .fx__add:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
 
 /* panah buka / tutup di tepi panel */
-html[data-uistyle="flat"] .fx__toggle{border-radius:0;background:var(--flat-fx-card);border:1px solid var(--flat-fx-line);border-right:0;color:var(--flat-fx-text);box-shadow:none}
+html[data-uistyle="flat"] .fx__toggle{border-radius:var(--flat-r);background:var(--flat-fx-card);border:1px solid var(--flat-fx-line);border-right:0;color:var(--flat-fx-text);box-shadow:none}
 html[data-uistyle="flat"] .fx__toggle:hover{background:var(--flat-fx-card-hover);color:var(--flat-fx-text)}
 html[data-uistyle="flat"] .fx__toggle:active{background:var(--flat-fx-accent);color:var(--flat-fx-on-accent)}
 html[data-uistyle="flat"] .fx__toggle:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:-2px}
 @media (max-width:640px){html[data-uistyle="flat"] .fx--open .fx__panel{box-shadow:-8px 0 20px var(--flat-fx-shadow)}}
 
 /* ---------- 11. Card efek & plugin (pola sama dengan card track: kotak, tanpa outline gradien / kilau / bevel) ---------- */
-html[data-uistyle="flat"] .fxc{border-radius:0;background:var(--flat-fx-card);background-image:none;color:var(--flat-fx-text);box-shadow:none;border:1px solid var(--flat-fx-line);transform:none;transition:background-color .15s ease}
+html[data-uistyle="flat"] .fxc{border-radius:var(--flat-r);background:var(--flat-fx-card);background-image:none;color:var(--flat-fx-text);box-shadow:none;border:1px solid var(--flat-fx-line);transform:none;transition:background-color .15s ease}
 html[data-uistyle="flat"] .fxc::before,
 html[data-uistyle="flat"] .fxc::after{display:none}
 html[data-uistyle="flat"] .fxc:hover,
@@ -299,10 +302,10 @@ html[data-uistyle="flat"] .fxc[data-kind="plugin"],
 html[data-uistyle="flat"] .fxc[data-kind="plugin"]:hover{box-shadow:inset 3px 0 0 var(--flat-fx-accent)}
 html[data-uistyle="flat"] .fxc.is-tilting{transition:background-color .15s ease}
 html[data-uistyle="flat"] .fxc__title{color:var(--flat-fx-text);font-weight:600}
-html[data-uistyle="flat"] .fxc__title:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px;border-radius:0}
+html[data-uistyle="flat"] .fxc__title:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px;border-radius:var(--flat-r)}
 html[data-uistyle="flat"] .fxc__label{color:var(--flat-fx-muted)}
-html[data-uistyle="flat"] .fxc-ph{border-radius:0;border:1px dashed var(--flat-fx-line);color:var(--flat-fx-muted)}
-html[data-uistyle="flat"] .fxc-ph__btn{border-radius:0;background:var(--flat-fx-inset);color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fxc-ph{border-radius:var(--flat-r);border:1px dashed var(--flat-fx-line);color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fxc-ph__btn{border-radius:var(--flat-r);background:var(--flat-fx-inset);color:var(--flat-fx-text)}
 html[data-uistyle="flat"] .fxc-ph__btn:hover{background:var(--flat-fx-inset-hover)}
 
 /* judul plugin: huruf timbul / gradien dimatikan, jadi teks solid */
@@ -314,16 +317,16 @@ html[data-uistyle="flat"] .fxc--deriz.is-off .fxc__title{background-image:none;f
 
 /* switch on/off: kotak datar (nyala = oranye, mati = abu terang; bulatan dalam jadi kotak) */
 html[data-uistyle="flat"] .fxc__pwr,
-html[data-uistyle="flat"] .fxc--rv .fxc__pwr{border-radius:0;background:var(--flat-fx-accent);box-shadow:none}
-html[data-uistyle="flat"] .fxc__pwr::after{border-radius:0;background:var(--flat-fx-card);box-shadow:none}
+html[data-uistyle="flat"] .fxc--rv .fxc__pwr{border-radius:var(--flat-r);background:var(--flat-fx-accent);box-shadow:none}
+html[data-uistyle="flat"] .fxc__pwr::after{border-radius:var(--flat-r);background:var(--flat-fx-card);box-shadow:none}
 html[data-uistyle="flat"] .fxc.is-off .fxc__pwr{background:var(--flat-fx-off)}
 html[data-uistyle="flat"] .fxc--deriz .fxc__pwr,
-html[data-uistyle="flat"] .fxc--deriz.is-off .fxc__pwr{width:12px;height:22px;margin:0 2px;border-radius:0;box-shadow:none;background:var(--flat-fx-accent)}
+html[data-uistyle="flat"] .fxc--deriz.is-off .fxc__pwr{width:12px;height:22px;margin:0 2px;border-radius:var(--flat-r);box-shadow:none;background:var(--flat-fx-accent)}
 html[data-uistyle="flat"] .fxc--deriz.is-off .fxc__pwr{background:var(--flat-fx-off)}
 html[data-uistyle="flat"] .fxc--deriz .fxc__pwr::after{display:block}
 /* lampu status plugin (MPCS / MGCHORD / CUTE) */
 html[data-uistyle="flat"] .fxc__led,
-html[data-uistyle="flat"] .fxc--cute .fxc__led{width:10px;height:10px;border-radius:0;background:var(--flat-fx-accent);box-shadow:none}
+html[data-uistyle="flat"] .fxc--cute .fxc__led{width:10px;height:10px;border-radius:var(--flat-r);background:var(--flat-fx-accent);box-shadow:none}
 html[data-uistyle="flat"] .fxc.is-off .fxc__led{background:var(--flat-fx-off)}
 
 /* tombol kecil di baris judul: titik tiga, buka, pop, pattern */
@@ -332,7 +335,7 @@ html[data-uistyle="flat"] .fxc__open,
 html[data-uistyle="flat"] .fxc__pop,
 html[data-uistyle="flat"] .fxc__pat,
 html[data-uistyle="flat"] .fxc--cute .fxc__open,
-html[data-uistyle="flat"] .fxc--cute .fxc__more{border-radius:0;background:transparent;box-shadow:none;color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fxc--cute .fxc__more{border-radius:var(--flat-r);background:transparent;box-shadow:none;color:var(--flat-fx-muted)}
 html[data-uistyle="flat"] .fxc__more:hover,
 html[data-uistyle="flat"] .fxc__more[aria-expanded="true"],
 html[data-uistyle="flat"] .fxc__open:hover,
@@ -361,38 +364,38 @@ html[data-uistyle="flat"] .fxc .fxk .circle-inner-stroke{stroke:none}
 html[data-uistyle="flat"] .fxc .fxk .knob-pos{stroke:var(--flat-fx-text);filter:none}
 html[data-uistyle="flat"] .fxc .knob-input:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:3px}
 
-html[data-uistyle="flat"] .vsl::before{border-radius:0;background:var(--flat-fx-off)}
-html[data-uistyle="flat"] .vsl__fill{border-radius:0;background:var(--flat-fx-accent)}
-html[data-uistyle="flat"] .vsl__thumb{border-radius:0;background:var(--flat-fx-strong)}
+html[data-uistyle="flat"] .vsl::before{border-radius:var(--flat-r);background:var(--flat-fx-off)}
+html[data-uistyle="flat"] .vsl__fill{border-radius:var(--flat-r);background:var(--flat-fx-accent)}
+html[data-uistyle="flat"] .vsl__thumb{border-radius:var(--flat-r);background:var(--flat-fx-strong)}
 html[data-uistyle="flat"] .vsl.is-dragging .vsl__thumb{background:var(--flat-fx-muted)}
 html[data-uistyle="flat"] .vsl:focus-visible .vsl__thumb{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
 
 /* ---------- 13. DERIZ: layar tetap gelap (kanvas digambar JS), tombol & pegangan jadi kotak datar ---------- */
-html[data-uistyle="flat"] .fxc--deriz .deriz__stage{border-radius:0;background:var(--flat-fx-screen);box-shadow:none}
+html[data-uistyle="flat"] .fxc--deriz .deriz__stage{border-radius:var(--flat-r);background:var(--flat-fx-screen);box-shadow:none}
 html[data-uistyle="flat"] .fxc--deriz .deriz__stage.is-over{box-shadow:inset 0 0 0 2px var(--flat-fx-accent)}
-html[data-uistyle="flat"] .fxc--deriz .deriz__up{border-radius:0;background:var(--flat-fx-card);color:var(--flat-fx-text);border:0;box-shadow:none}
+html[data-uistyle="flat"] .fxc--deriz .deriz__up{border-radius:var(--flat-r);background:var(--flat-fx-card);color:var(--flat-fx-text);border:0;box-shadow:none}
 html[data-uistyle="flat"] .fxc--deriz .deriz__up:hover{background:var(--flat-fx-accent);color:var(--flat-fx-on-accent)}
 html[data-uistyle="flat"] .fxc--deriz .deriz__up:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
-html[data-uistyle="flat"] .fxc--deriz .deriz__swap:not([hidden]){border-radius:0;background:var(--flat-fx-inset);color:var(--flat-fx-text);box-shadow:none}
+html[data-uistyle="flat"] .fxc--deriz .deriz__swap:not([hidden]){border-radius:var(--flat-r);background:var(--flat-fx-inset);color:var(--flat-fx-text);box-shadow:none}
 html[data-uistyle="flat"] .fxc--deriz .deriz__swap:hover{background:var(--flat-fx-inset-hover);color:var(--flat-fx-text);box-shadow:none}
 html[data-uistyle="flat"] .fxc--deriz .deriz__swap:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
-html[data-uistyle="flat"] .deriz__nav{box-shadow:none;border-radius:0}
-html[data-uistyle="flat"] .deriz__thumb{border-radius:0;background:var(--flat-fx-strong);box-shadow:none}
+html[data-uistyle="flat"] .deriz__nav{box-shadow:none;border-radius:var(--flat-r)}
+html[data-uistyle="flat"] .deriz__thumb{border-radius:var(--flat-r);background:var(--flat-fx-strong);box-shadow:none}
 html[data-uistyle="flat"] .deriz__nav:hover .deriz__thumb,
 html[data-uistyle="flat"] .deriz__nav.is-dragging .deriz__thumb{background:var(--flat-fx-muted)}
 html[data-uistyle="flat"] .deriz__thumb::after{background:var(--flat-fx-accent);box-shadow:none}
 html[data-uistyle="flat"] .fxc--deriz .deriz__swap{color:var(--flat-fx-text)}
 
 /* ---------- 14. Equalizer: grafik (kanvas lewat token --flat-fx-eq-*), bar band, nilai ---------- */
-html[data-uistyle="flat"] .eq__graph{border-radius:0;background:var(--flat-fx-eq-bg);box-shadow:none;border:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .eq__graph{border-radius:var(--flat-r);background:var(--flat-fx-eq-bg);box-shadow:none;border:1px solid var(--flat-fx-line)}
 html[data-uistyle="flat"] .eq__bar{background:var(--flat-fx-inset);border-top:1px solid var(--flat-fx-line);backdrop-filter:none;-webkit-backdrop-filter:none}
-html[data-uistyle="flat"] .eq__bands{border-radius:0;background:var(--flat-fx-card);border:1px solid var(--flat-fx-line)}
-html[data-uistyle="flat"] .eq__band{border-radius:0;color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .eq__bands{border-radius:var(--flat-r);background:var(--flat-fx-card);border:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .eq__band{border-radius:var(--flat-r);color:var(--flat-fx-muted)}
 html[data-uistyle="flat"] .eq__band:hover{color:var(--flat-fx-text)}
 html[data-uistyle="flat"] .eq__band[aria-selected="true"]{background:var(--flat-fx-inset);color:var(--flat-fx-text);box-shadow:inset 0 -2px 0 var(--flat-fx-accent)}
 html[data-uistyle="flat"] .eq__band:active{transform:none}
 html[data-uistyle="flat"] .eq__band:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:-2px}
-html[data-uistyle="flat"] .eq__band i{border-radius:0;box-shadow:none}
+html[data-uistyle="flat"] .eq__band i{border-radius:var(--flat-r);box-shadow:none}
 /* warna titik band diambil dari token palet (inline --c bawaan dikalahkan lewat !important) */
 html[data-uistyle="flat"] .eq__band:nth-child(1){--c:var(--flat-fx-eq-band-1)!important}
 html[data-uistyle="flat"] .eq__band:nth-child(2){--c:var(--flat-fx-eq-band-2)!important}
@@ -400,7 +403,7 @@ html[data-uistyle="flat"] .eq__band:nth-child(3){--c:var(--flat-fx-eq-band-3)!im
 html[data-uistyle="flat"] .eq__band:nth-child(4){--c:var(--flat-fx-eq-band-4)!important}
 html[data-uistyle="flat"] .eq__band:nth-child(5){--c:var(--flat-fx-eq-band-5)!important}
 html[data-uistyle="flat"] .eq__bar .fxc__label{color:var(--flat-fx-muted)}
-html[data-uistyle="flat"] .eq__val{border-radius:0;background:var(--flat-fx-card);color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .eq__val{border-radius:var(--flat-r);background:var(--flat-fx-card);color:var(--flat-fx-text)}
 html[data-uistyle="flat"] .eq__bar .fxk .circle{stroke:var(--flat-fx-accent)}
 html[data-uistyle="flat"] .eq__bar .fxk .circle-bg{stroke:var(--flat-fx-off)}
 html[data-uistyle="flat"] .eq__bar .fxk .circle-inner{fill:var(--flat-fx-knob)}
@@ -409,7 +412,7 @@ html[data-uistyle="flat"] .eq__bar .fxk .knob-pos{stroke:var(--flat-fx-text)}
 html[data-uistyle="flat"] .fxc--eq.is-off .eq__cv{filter:none;opacity:.6}
 
 /* ---------- 15. Reverb: unit tape jadi dua blok datar (atas = layar gelap, bawah = card) ---------- */
-html[data-uistyle="flat"] .rv__unit{border-radius:0;background:var(--flat-fx-card);box-shadow:none;border:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .rv__unit{border-radius:var(--flat-r);background:var(--flat-fx-card);box-shadow:none;border:1px solid var(--flat-fx-line)}
 html[data-uistyle="flat"] .rv__top{background:var(--flat-fx-screen)}
 html[data-uistyle="flat"] .rv__reel circle,
 html[data-uistyle="flat"] .rv__reel line{stroke:var(--flat-fx-on-screen)}
@@ -427,7 +430,7 @@ html[data-uistyle="flat"] .fxc--rv .fxk .knob-pos{stroke:var(--flat-fx-text)}
 html[data-uistyle="flat"] .fxc--rv .knob-input:focus-visible{outline:2px solid var(--flat-fx-focus)}
 
 /* ---------- 16. Delay: kartu ringkasan di panel (panel penuh di jendela tengah layar belum diubah) ---------- */
-html[data-uistyle="flat"] .fxc--delay .dly__sum{border-radius:0;background:var(--flat-fx-inset);border:1px solid var(--flat-fx-line);color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fxc--delay .dly__sum{border-radius:var(--flat-r);background:var(--flat-fx-inset);border:1px solid var(--flat-fx-line);color:var(--flat-fx-text)}
 html[data-uistyle="flat"] .fxc--delay .dly__sum span{color:var(--flat-fx-muted)}
 html[data-uistyle="flat"] .fxc--delay .dly__sum:hover{background:var(--flat-fx-inset-hover);border-color:var(--flat-fx-line)}
 html[data-uistyle="flat"] .fxc--delay .dly__sum:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
@@ -435,20 +438,20 @@ html[data-uistyle="flat"] .fxc--delay .dly__sum:focus-visible{outline:2px solid 
 /* ---------- 17. Menu: picker tambah efek, menu titik tiga card, daftar pattern ---------- */
 html[data-uistyle="flat"] .fx-pick,
 html[data-uistyle="flat"] .fx-pats,
-html[data-uistyle="flat"] .track-menu.fx-menu{border-radius:0;background:var(--flat-fx-card);background-image:none;border:1px solid var(--flat-fx-line);color:var(--flat-fx-text);box-shadow:0 4px 12px var(--flat-fx-shadow)}
-html[data-uistyle="flat"] .fx-pick__item{border-radius:0;color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .track-menu.fx-menu{border-radius:var(--flat-r);background:var(--flat-fx-card);background-image:none;border:1px solid var(--flat-fx-line);color:var(--flat-fx-text);box-shadow:0 4px 12px var(--flat-fx-shadow)}
+html[data-uistyle="flat"] .fx-pick__item{border-radius:var(--flat-r);color:var(--flat-fx-text)}
 html[data-uistyle="flat"] .fx-pick__item:hover:not(:disabled),
 html[data-uistyle="flat"] .fx-pick__item:focus-visible{background:var(--flat-fx-inset);transform:none}
 html[data-uistyle="flat"] .fx-pick__item:active:not(:disabled){transform:none}
-html[data-uistyle="flat"] .fx-menu .track-menu__item{border-radius:0;color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fx-menu .track-menu__item{border-radius:var(--flat-r);color:var(--flat-fx-text)}
 html[data-uistyle="flat"] .fx-menu .track-menu__item:hover,
 html[data-uistyle="flat"] .fx-menu .track-menu__item:focus-visible{background:var(--flat-fx-inset);transform:none}
 html[data-uistyle="flat"] .fx-menu .track-menu__item--danger{color:var(--flat-fx-danger)}
-html[data-uistyle="flat"] .fx-pats__item{border-radius:0;border:0;background:transparent;color:var(--flat-fx-text);text-shadow:none;box-shadow:none;letter-spacing:0}
+html[data-uistyle="flat"] .fx-pats__item{border-radius:var(--flat-r);border:0;background:transparent;color:var(--flat-fx-text);text-shadow:none;box-shadow:none;letter-spacing:0}
 html[data-uistyle="flat"] .fx-pats__item:hover,
 html[data-uistyle="flat"] .fx-pats__item:focus-visible,
 html[data-uistyle="flat"] .fx-pats__item:active{background:var(--flat-fx-inset);box-shadow:none;transform:none;outline:0}
-html[data-uistyle="flat"] .fx-pats__dot{border-radius:0;background:var(--c);box-shadow:none}
+html[data-uistyle="flat"] .fx-pats__dot{border-radius:var(--flat-r);background:var(--c);box-shadow:none}
 html[data-uistyle="flat"] .fx-pats__empty{color:var(--flat-fx-muted)}
 
 
@@ -485,7 +488,7 @@ html[data-uistyle="flat"]{
 
 /* ---------- 19. Navigasi: tombol menu pojok, layar penuh, tutorial ---------- */
 html[data-uistyle="flat"] .menu-btn,
-html[data-uistyle="flat"] .tut-btn{border-radius:0;background:var(--flat-nv-card);color:var(--flat-nv-text);border:1px solid var(--flat-nv-line);
+html[data-uistyle="flat"] .tut-btn{border-radius:var(--flat-r);background:var(--flat-nv-card);color:var(--flat-nv-text);border:1px solid var(--flat-nv-line);
   box-shadow:none;transition:background-color .15s ease,color .15s ease,opacity .2s ease}
 html[data-uistyle="flat"] .menu-btn::before,
 html[data-uistyle="flat"] .menu-btn::after{display:none}
@@ -510,14 +513,14 @@ html[data-uistyle="flat"] .mp__open small,
 html[data-uistyle="flat"] .mp__xhint{color:var(--flat-nv-muted)}
 
 /* card isi panel */
-html[data-uistyle="flat"] .mp__card{border-radius:0;background-color:var(--flat-nv-card);color:var(--flat-nv-text);box-shadow:none;border:1px solid var(--flat-nv-line)}
+html[data-uistyle="flat"] .mp__card{border-radius:var(--flat-r);background-color:var(--flat-nv-card);color:var(--flat-nv-text);box-shadow:none;border:1px solid var(--flat-nv-line)}
 html[data-uistyle="flat"] .mp__card::before{display:none}
 html[data-uistyle="flat"] .mp__sub{color:var(--flat-nv-text)}
 
 /* tombol kategori / segmen / kembali: kotak solid, aktif = strip oranye di bawah */
 html[data-uistyle="flat"] .mp__cat,
 html[data-uistyle="flat"] .mp__segbtn,
-html[data-uistyle="flat"] .mp__back{border-radius:0;border:1px solid var(--flat-nv-line);background:var(--flat-nv-card);color:var(--flat-nv-text);box-shadow:none;
+html[data-uistyle="flat"] .mp__back{border-radius:var(--flat-r);border:1px solid var(--flat-nv-line);background:var(--flat-nv-card);color:var(--flat-nv-text);box-shadow:none;
   transition:background-color .15s ease,color .15s ease}
 html[data-uistyle="flat"] .mp__cat::before,html[data-uistyle="flat"] .mp__cat::after,
 html[data-uistyle="flat"] .mp__segbtn::before,html[data-uistyle="flat"] .mp__segbtn::after,
@@ -536,22 +539,22 @@ html[data-uistyle="flat"] .mp__cat > svg:last-child{color:var(--flat-nv-muted)}
 html[data-uistyle="flat"] :is(.mp__cat,.mp__segbtn,.mp__back,.mp__avabtn):focus-visible{outline:2px solid var(--flat-nv-focus);outline-offset:-2px}
 
 /* contoh warna / ikon mini di tombol segmen */
-html[data-uistyle="flat"] .mp__sw{border-radius:0;border:1px solid var(--flat-nv-line-strong)}
+html[data-uistyle="flat"] .mp__sw{border-radius:var(--flat-r);border:1px solid var(--flat-nv-line-strong)}
 html[data-uistyle="flat"] .mp__sw--w1,
 html[data-uistyle="flat"] .mp__sw--w2{border:0}
 html[data-uistyle="flat"] .mp__sw--w1{background:linear-gradient(var(--flat-nv-text),var(--flat-nv-text)) 0 4px/100% 6px no-repeat}
 html[data-uistyle="flat"] .mp__sw--w2{background:linear-gradient(var(--flat-nv-text),var(--flat-nv-text)) 0 1px/100% 4.5px no-repeat,linear-gradient(var(--flat-nv-text),var(--flat-nv-text)) 0 8.5px/100% 4.5px no-repeat}
 
 /* switch: rel kotak, thumb kotak (nyala = oranye) */
-html[data-uistyle="flat"] .mp__switch{border-radius:0;border:0;background:var(--flat-nv-off);transition:background-color .15s ease}
-html[data-uistyle="flat"] .mp__switch i{border-radius:0;background:var(--flat-nv-card);box-shadow:none;transition:transform .15s ease}
+html[data-uistyle="flat"] .mp__switch{border-radius:var(--flat-r);border:0;background:var(--flat-nv-off);transition:background-color .15s ease}
+html[data-uistyle="flat"] .mp__switch i{border-radius:var(--flat-r);background:var(--flat-nv-card);box-shadow:none;transition:transform .15s ease}
 html[data-uistyle="flat"] .mp__switch.is-on{background:var(--flat-nv-accent);border:0}
 html[data-uistyle="flat"] .mp__switch:active i{width:22px}
 html[data-uistyle="flat"] .mp__switch.is-on:active i{transform:translateX(18px)}
 html[data-uistyle="flat"] .mp__switch:focus-visible{outline:2px solid var(--flat-nv-focus);outline-offset:2px}
 
 /* tombol SAVE: kotak ink; progres tahan = bar di dasar tombol (cincin SVG disembunyikan) */
-html[data-uistyle="flat"] .mp__savebtn{width:96px;height:96px;border-radius:0;background:var(--flat-nv-strong);color:var(--flat-nv-on-strong);box-shadow:none;overflow:hidden;transition:background-color .15s ease}
+html[data-uistyle="flat"] .mp__savebtn{width:96px;height:96px;border-radius:var(--flat-r);background:var(--flat-nv-strong);color:var(--flat-nv-on-strong);box-shadow:none;overflow:hidden;transition:background-color .15s ease}
 html[data-uistyle="flat"] .mp__savebtn::before{display:none}
 html[data-uistyle="flat"] .mp__savebtn::after{inset:auto 0 0 0;height:5px;width:0;border-radius:0;background:var(--flat-nv-accent)}
 html[data-uistyle="flat"] .mp__savebtn.is-holding::after{width:100%;transition:width var(--hold,700ms) linear}
@@ -563,36 +566,36 @@ html[data-uistyle="flat"] .mp__savebtn:focus-visible{outline:2px solid var(--fla
 html[data-uistyle="flat"] .mp__ring{display:none}
 
 /* daftar project, impor, ikon aksi */
-html[data-uistyle="flat"] .mp__imp{border-radius:0;background:var(--flat-nv-inset);color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .mp__imp{border-radius:var(--flat-r);background:var(--flat-nv-inset);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .mp__imp:hover{background:var(--flat-nv-inset-hover)}
 html[data-uistyle="flat"] .mp__imp--bad{color:var(--flat-nv-danger)}
-html[data-uistyle="flat"] .mp__open{border-radius:0;background:var(--flat-nv-inset);color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .mp__open{border-radius:var(--flat-r);background:var(--flat-nv-inset);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .mp__open:hover,
 html[data-uistyle="flat"] .mp__open:focus-visible{background:var(--flat-nv-inset-hover)}
-html[data-uistyle="flat"] .mp__ico{border-radius:0;color:var(--flat-nv-muted)}
+html[data-uistyle="flat"] .mp__ico{border-radius:var(--flat-r);color:var(--flat-nv-muted)}
 html[data-uistyle="flat"] .mp__ico:hover{background:var(--flat-nv-inset);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .mp__ico.is-sure{background:var(--flat-nv-danger);color:var(--flat-nv-on-strong)}
 
 /* tombol ekspor, tombol utama, input, profil */
-html[data-uistyle="flat"] .mp__expbtn{border-radius:0;background:var(--flat-nv-strong);color:var(--flat-nv-on-strong);box-shadow:none;transition:background-color .15s ease}
+html[data-uistyle="flat"] .mp__expbtn{border-radius:var(--flat-r);background:var(--flat-nv-strong);color:var(--flat-nv-on-strong);box-shadow:none;transition:background-color .15s ease}
 html[data-uistyle="flat"] .mp__expbtn::before,
 html[data-uistyle="flat"] .mp__expbtn::after{display:none}
 html[data-uistyle="flat"] .mp__expbtn:hover{transform:none;filter:none;background:var(--flat-pal-grip)}
 html[data-uistyle="flat"] .mp__expbtn:active{transform:none;box-shadow:none;background:var(--flat-pal-grip)}
 html[data-uistyle="flat"] .mp__expbtn:focus-visible{outline:2px solid var(--flat-nv-focus);outline-offset:3px}
-html[data-uistyle="flat"] .mp__prim{border-radius:0;background:var(--flat-nv-strong);color:var(--flat-nv-on-strong)}
+html[data-uistyle="flat"] .mp__prim{border-radius:var(--flat-r);background:var(--flat-nv-strong);color:var(--flat-nv-on-strong)}
 html[data-uistyle="flat"] .mp__prim:hover{filter:none;background:var(--flat-pal-grip)}
 html[data-uistyle="flat"] .mp__prim--bad{background:var(--flat-nv-inset);color:var(--flat-nv-danger)}
 html[data-uistyle="flat"] .mp__inp,
 html[data-uistyle="flat"] .svov__in,
-html[data-uistyle="flat"] .plg__in{border-radius:0;border:1px solid var(--flat-nv-line);background:var(--flat-nv-inset);color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .plg__in{border-radius:var(--flat-r);border:1px solid var(--flat-nv-line);background:var(--flat-nv-inset);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .mp__inp:focus-visible,
 html[data-uistyle="flat"] .svov__in:focus,
 html[data-uistyle="flat"] .plg__in:focus-visible{outline:2px solid var(--flat-nv-focus);outline-offset:-1px}
-html[data-uistyle="flat"] .mp__ava{border-radius:0;background:var(--flat-nv-strong);color:var(--flat-nv-on-strong);box-shadow:none}
+html[data-uistyle="flat"] .mp__ava{border-radius:var(--flat-r);background:var(--flat-nv-strong);color:var(--flat-nv-on-strong);box-shadow:none}
 html[data-uistyle="flat"] .mp__profcat > .mp__ava:first-child{color:var(--flat-nv-on-strong)}
-html[data-uistyle="flat"] .mp__avabtn{border-radius:0}
-html[data-uistyle="flat"] .mp__avacam{border-radius:0;background:var(--flat-nv-accent);color:var(--flat-nv-on-accent);box-shadow:0 0 0 3px var(--flat-nv-card)}
+html[data-uistyle="flat"] .mp__avabtn{border-radius:var(--flat-r)}
+html[data-uistyle="flat"] .mp__avacam{border-radius:var(--flat-r);background:var(--flat-nv-accent);color:var(--flat-nv-on-accent);box-shadow:0 0 0 3px var(--flat-nv-card)}
 html[data-uistyle="flat"] .mp__pmsg{color:var(--flat-nv-muted)}
 
 /* shop / Manage Plugin */
@@ -601,13 +604,13 @@ html[data-uistyle="flat"] .shop__price{color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .shop__desc,
 html[data-uistyle="flat"] .shop__price--lock,
 html[data-uistyle="flat"] .plg__txt{color:var(--flat-nv-muted)}
-html[data-uistyle="flat"] .shop__art{border-radius:0;background:var(--flat-nv-inset);border:1px solid var(--flat-nv-line);box-shadow:none}
+html[data-uistyle="flat"] .shop__art{border-radius:var(--flat-r);background:var(--flat-nv-inset);border:1px solid var(--flat-nv-line);box-shadow:none}
 html[data-uistyle="flat"] .shop__art img{filter:none}
-html[data-uistyle="flat"] .shop__tag{border-radius:0;border:1px solid var(--flat-nv-line);background:var(--flat-nv-inset);box-shadow:none;color:var(--flat-nv-muted)}
-html[data-uistyle="flat"] .shop__state i{border-radius:0;background:var(--flat-nv-accent);box-shadow:none}
-html[data-uistyle="flat"] .shop__n{border-radius:0;background:var(--flat-nv-inset);color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .shop__tag{border-radius:var(--flat-r);border:1px solid var(--flat-nv-line);background:var(--flat-nv-inset);box-shadow:none;color:var(--flat-nv-muted)}
+html[data-uistyle="flat"] .shop__state i{border-radius:var(--flat-r);background:var(--flat-nv-accent);box-shadow:none}
+html[data-uistyle="flat"] .shop__n{border-radius:var(--flat-r);background:var(--flat-nv-inset);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .mp__segbtn.is-on .shop__n{background:var(--flat-nv-accent);color:var(--flat-nv-on-accent)}
-html[data-uistyle="flat"] .plg__btn{border-radius:0;background:var(--flat-nv-strong);color:var(--flat-nv-on-strong)}
+html[data-uistyle="flat"] .plg__btn{border-radius:var(--flat-r);background:var(--flat-nv-strong);color:var(--flat-nv-on-strong)}
 html[data-uistyle="flat"] .plg__btn--ghost{background:transparent;border:1px solid var(--flat-nv-line-strong);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .plg__err{color:var(--flat-nv-danger)}
 html[data-uistyle="flat"] .plg__btn:focus-visible{outline:2px solid var(--flat-nv-focus);outline-offset:2px}
@@ -616,32 +619,32 @@ html[data-uistyle="flat"] .plg__btn:focus-visible{outline:2px solid var(--flat-n
 html[data-uistyle="flat"] .svov__back,
 html[data-uistyle="flat"] .xpo{background:var(--flat-nv-scrim)}
 html[data-uistyle="flat"] .svov__card,
-html[data-uistyle="flat"] .xpo__card{border-radius:0;background-color:var(--flat-nv-card);color:var(--flat-nv-text);border:1px solid var(--flat-nv-line);box-shadow:0 4px 12px var(--flat-nv-shadow)}
+html[data-uistyle="flat"] .xpo__card{border-radius:var(--flat-r);background-color:var(--flat-nv-card);color:var(--flat-nv-text);border:1px solid var(--flat-nv-line);box-shadow:0 4px 12px var(--flat-nv-shadow)}
 html[data-uistyle="flat"] .svov__lbl,
 html[data-uistyle="flat"] .svov__note,
 html[data-uistyle="flat"] .xpo__time,
 html[data-uistyle="flat"] .xpo__hint{color:var(--flat-nv-muted)}
 html[data-uistyle="flat"] .svov.is-done .svov__note{color:var(--flat-nv-ok)}
 html[data-uistyle="flat"] .svov__btn,
-html[data-uistyle="flat"] .xpo__cancel{border-radius:0;background:var(--flat-nv-inset);color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .xpo__cancel{border-radius:var(--flat-r);background:var(--flat-nv-inset);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .svov__btn:hover,
 html[data-uistyle="flat"] .xpo__cancel:hover{background:var(--flat-nv-inset-hover)}
 html[data-uistyle="flat"] .svov__btn--ok{background:var(--flat-nv-strong);color:var(--flat-nv-on-strong)}
 html[data-uistyle="flat"] .svov__btn--ok:hover{background:var(--flat-pal-grip)}
-html[data-uistyle="flat"] .xpo__bar{border-radius:0;background:var(--flat-nv-off)}
-html[data-uistyle="flat"] .xpo__bar i{border-radius:0;background:var(--flat-nv-accent)}
+html[data-uistyle="flat"] .xpo__bar{border-radius:var(--flat-r);background:var(--flat-nv-off)}
+html[data-uistyle="flat"] .xpo__bar i{border-radius:var(--flat-r);background:var(--flat-nv-accent)}
 html[data-uistyle="flat"] .xpo__cancel:focus-visible{outline:2px solid var(--flat-nv-focus);outline-offset:2px}
 
 /* ---------- 22. Transport (panel bawah): card selebar layar + tombol ---------- */
 html[data-uistyle="flat"] .transportbar{background:transparent}
 html[data-uistyle="flat"] .tp-dock,
-html[data-uistyle="flat"] .transportbar .tp-dock{border-radius:0;background-color:var(--flat-nv-head);box-shadow:none;border-top:1px solid var(--flat-nv-line);color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .transportbar .tp-dock{border-radius:var(--flat-r);background-color:var(--flat-nv-head);box-shadow:none;border-top:1px solid var(--flat-nv-line);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .tp-dock::before,
 html[data-uistyle="flat"] .tp-dock::after{display:none}
 html[data-uistyle="flat"] .tp-dock:hover{transform:none;box-shadow:none}
 
 /* tombol alat / transport / riwayat: kotak outline tipis, tanpa membesar saat ditekan */
-html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn){border-radius:0;border:var(--tb-bd) solid var(--flat-nv-line-strong);background:transparent;color:var(--flat-nv-text);
+html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn){border-radius:var(--flat-r);border:var(--tb-bd) solid var(--flat-nv-line-strong);background:transparent;color:var(--flat-nv-text);
   transition:background-color .15s ease,border-color .15s ease,color .15s ease,opacity .2s ease}
 html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn):hover:not(:disabled){background:var(--flat-nv-inset);border-color:var(--flat-nv-text);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn):active:not(:disabled){transform:none;background:var(--flat-nv-inset-hover)}
@@ -656,7 +659,7 @@ html[data-uistyle="flat"] .transportbar.is-collapsed .kbd-toggle{border-color:va
 
 /* ---------- 23. Panel mengambang dari transport: Pitch project & Metronome ---------- */
 html[data-uistyle="flat"] .pitch-panel,
-html[data-uistyle="flat"] .metro-panel{border-radius:0;background:var(--flat-nv-card);border:1px solid var(--flat-nv-line);box-shadow:0 4px 12px var(--flat-nv-shadow);color:var(--flat-nv-text);animation:none}
+html[data-uistyle="flat"] .metro-panel{border-radius:var(--flat-r);background:var(--flat-nv-card);border:1px solid var(--flat-nv-line);box-shadow:0 4px 12px var(--flat-nv-shadow);color:var(--flat-nv-text);animation:none}
 html[data-uistyle="flat"] .pitch-title,
 html[data-uistyle="flat"] .pitch-unit,
 html[data-uistyle="flat"] .pitch-note,
@@ -672,14 +675,14 @@ html[data-uistyle="flat"] .pitch-body{fill:var(--flat-nv-inset);stroke:var(--fla
 html[data-uistyle="flat"] .pitch-ptr{stroke:var(--flat-nv-text);stroke-linecap:butt}
 html[data-uistyle="flat"] .pitch-dot,
 html[data-uistyle="flat"] .metro-knob{fill:var(--flat-nv-text);filter:none}
-html[data-uistyle="flat"] .metro-dots i{border-radius:0;background:var(--flat-nv-off);transition:none}
+html[data-uistyle="flat"] .metro-dots i{border-radius:var(--flat-r);background:var(--flat-nv-off);transition:none}
 html[data-uistyle="flat"] .metro-dots i.on{background:var(--flat-nv-text);transform:none}
 html[data-uistyle="flat"] .metro-dots i:first-child.on{background:var(--flat-nv-accent)}
 html[data-uistyle="flat"] .pitch-step,
 html[data-uistyle="flat"] .pitch-reset,
 html[data-uistyle="flat"] .metro-step,
 html[data-uistyle="flat"] .metro-toggle,
-html[data-uistyle="flat"] .metro-chip{border-radius:0;border:1px solid var(--flat-nv-line);background:var(--flat-nv-inset);color:var(--flat-nv-text);transition:background-color .15s ease,border-color .15s ease}
+html[data-uistyle="flat"] .metro-chip{border-radius:var(--flat-r);border:1px solid var(--flat-nv-line);background:var(--flat-nv-inset);color:var(--flat-nv-text);transition:background-color .15s ease,border-color .15s ease}
 html[data-uistyle="flat"] .pitch-step:hover,
 html[data-uistyle="flat"] .pitch-reset:hover:not(:disabled),
 html[data-uistyle="flat"] .metro-step:hover,
@@ -699,30 +702,30 @@ html[data-uistyle="flat"] :is(.pitch-step,.pitch-reset,.metro-step,.metro-toggle
 /* ---------- 24. Card & menu mengambang: Upload audio, tambah track, menu klip / tempo ---------- */
 html[data-uistyle="flat"] .upl-card,
 html[data-uistyle="flat"] .add-menu,
-html[data-uistyle="flat"] .clip-card{border-radius:0;background:var(--flat-nv-card);border:1px solid var(--flat-nv-line);color:var(--flat-nv-text);box-shadow:0 4px 12px var(--flat-nv-shadow);animation:none}
-html[data-uistyle="flat"] .clip-card__in{border-radius:0}
+html[data-uistyle="flat"] .clip-card{border-radius:var(--flat-r);background:var(--flat-nv-card);border:1px solid var(--flat-nv-line);color:var(--flat-nv-text);box-shadow:0 4px 12px var(--flat-nv-shadow);animation:none}
+html[data-uistyle="flat"] .clip-card__in{border-radius:var(--flat-r)}
 html[data-uistyle="flat"] .upl-btn,
-html[data-uistyle="flat"] .clip-card__go{border-radius:0;background:var(--flat-nv-strong);color:var(--flat-nv-on-strong);animation:none;transition:background-color .15s ease}
+html[data-uistyle="flat"] .clip-card__go{border-radius:var(--flat-r);background:var(--flat-nv-strong);color:var(--flat-nv-on-strong);animation:none;transition:background-color .15s ease}
 html[data-uistyle="flat"] .upl-btn:hover,
 html[data-uistyle="flat"] .clip-card__go:hover{transform:none;opacity:1;background:var(--flat-pal-grip)}
 html[data-uistyle="flat"] .upl-btn:active,
 html[data-uistyle="flat"] .clip-card__go:active{transform:none}
 html[data-uistyle="flat"] .upl-btn:hover svg{transform:none}
 html[data-uistyle="flat"] .add-menu__item,
-html[data-uistyle="flat"] .clip-card__item{border-radius:0;color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .clip-card__item{border-radius:var(--flat-r);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .add-menu__item:hover,
 html[data-uistyle="flat"] .add-menu__item:focus-visible,
 html[data-uistyle="flat"] .clip-card__item:hover,
 html[data-uistyle="flat"] .clip-card__item:focus-visible{background:var(--flat-nv-inset);transform:none}
 html[data-uistyle="flat"] .add-menu__item:active{transform:none}
 html[data-uistyle="flat"] .clip-card__title{color:var(--flat-nv-text)}
-html[data-uistyle="flat"] .clip-card__input{border-radius:0;border:1px solid var(--flat-nv-line);background:var(--flat-nv-inset);color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .clip-card__input{border-radius:var(--flat-r);border:1px solid var(--flat-nv-line);background:var(--flat-nv-inset);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .clip-card__input:focus{border-color:var(--flat-nv-text);background:var(--flat-nv-card)}
 html[data-uistyle="flat"] .clip-card__err{color:var(--flat-nv-danger)}
 
 /* ---------- 25. Toolbar bulat di atas pattern terpilih (Copy / Delete / Snap / Edit / More) & tombol tambah pattern ---------- */
 html[data-uistyle="flat"] .pat-btn,
-html[data-uistyle="flat"] .add-card{border-radius:0;border:1px solid var(--flat-nv-line);background:var(--flat-nv-card);color:var(--flat-nv-text);box-shadow:none;transition:background-color .15s ease,color .15s ease}
+html[data-uistyle="flat"] .add-card{border-radius:var(--flat-r);border:1px solid var(--flat-nv-line);background:var(--flat-nv-card);color:var(--flat-nv-text);box-shadow:none;transition:background-color .15s ease,color .15s ease}
 html[data-uistyle="flat"] .pat-btn:hover,
 html[data-uistyle="flat"] .add-card:hover{transform:none;background:var(--flat-nv-card-hover)}
 html[data-uistyle="flat"] .pat-btn:active,
@@ -737,23 +740,66 @@ html[data-uistyle="flat"] .kbd{background:var(--flat-nv-bg)}
 html[data-uistyle="flat"] .kbd.is-open{border-top-color:var(--flat-nv-line)}
 html[data-uistyle="flat"] .kbd__title{color:var(--flat-nv-muted)}
 html[data-uistyle="flat"] .kbd__octlabel{color:var(--flat-nv-text)}
-html[data-uistyle="flat"] .kbd__btn{border-radius:0;background:var(--flat-nv-inset);color:var(--flat-nv-text);transition:background-color .15s ease,opacity .15s ease}
+html[data-uistyle="flat"] .kbd__btn{border-radius:var(--flat-r);background:var(--flat-nv-inset);color:var(--flat-nv-text);transition:background-color .15s ease,opacity .15s ease}
 html[data-uistyle="flat"] .kbd__btn:hover{background:var(--flat-nv-inset-hover)}
 html[data-uistyle="flat"] .kbd__btn:active{transform:none}
 html[data-uistyle="flat"] .kbd__btn:focus-visible{outline:2px solid var(--flat-nv-focus);outline-offset:2px}
 
 /* ---------- 27. Tutorial: gelembung & tombol kotak ---------- */
-html[data-uistyle="flat"] .tut__ring{border-radius:0;border-color:var(--flat-nv-accent)}
-html[data-uistyle="flat"] .tut__bubble{border-radius:0;background:var(--flat-nv-card);color:var(--flat-nv-text);border:1px solid var(--flat-nv-line);box-shadow:0 4px 12px var(--flat-nv-shadow)}
-html[data-uistyle="flat"] .tut__body{border-radius:0;background:var(--flat-nv-card)}
-html[data-uistyle="flat"] .tut__tail{border-radius:0;background:var(--flat-nv-card);border:1px solid var(--flat-nv-line)}
+html[data-uistyle="flat"] .tut__ring{border-radius:var(--flat-r);border-color:var(--flat-nv-accent)}
+html[data-uistyle="flat"] .tut__bubble{border-radius:var(--flat-r);background:var(--flat-nv-card);color:var(--flat-nv-text);border:1px solid var(--flat-nv-line);box-shadow:0 4px 12px var(--flat-nv-shadow)}
+html[data-uistyle="flat"] .tut__body{border-radius:var(--flat-r);background:var(--flat-nv-card)}
+html[data-uistyle="flat"] .tut__tail{border-radius:var(--flat-r);background:var(--flat-nv-card);border:1px solid var(--flat-nv-line)}
 html[data-uistyle="flat"] .tut__bubble.is-pop{animation:none}
 html[data-uistyle="flat"] .tut__title{color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .tut__text{color:var(--flat-nv-muted)}
-html[data-uistyle="flat"] .tut__x{border-radius:0;color:var(--flat-nv-muted)}
+html[data-uistyle="flat"] .tut__x{border-radius:var(--flat-r);color:var(--flat-nv-muted)}
 html[data-uistyle="flat"] .tut__x:hover{background:var(--flat-nv-inset);color:var(--flat-nv-text)}
-html[data-uistyle="flat"] .tut__btn{border-radius:0;border:1px solid var(--flat-nv-line-strong);background:var(--flat-nv-card);color:var(--flat-nv-text)}
+html[data-uistyle="flat"] .tut__btn{border-radius:var(--flat-r);border:1px solid var(--flat-nv-line-strong);background:var(--flat-nv-card);color:var(--flat-nv-text)}
 html[data-uistyle="flat"] .tut__btn:hover{background:var(--flat-nv-inset)}
 html[data-uistyle="flat"] .tut__btn--go{border-color:var(--flat-nv-strong);background:var(--flat-nv-strong);color:var(--flat-nv-on-strong)}
 html[data-uistyle="flat"] .tut__btn--go:hover{background:var(--flat-pal-grip)}
 html[data-uistyle="flat"] :is(.tut__btn,.tut__x):focus-visible{outline:2px solid var(--flat-nv-focus);outline-offset:2px}
+
+/* ---------- 28. Sudut membulat tipis (token --flat-r / --flat-r-lg / --flat-r-xs di bagian 0) ----------
+   Card / panel / dialog / menu mengambang = --flat-r-lg. Baris penuh selebar kolom (card track, tombol tambah track) tetap lurus supaya menyambung tanpa celah. */
+html[data-uistyle="flat"] .tracklist .trkcard,
+html[data-uistyle="flat"] .tracklist .trkcard--on,
+html[data-uistyle="flat"] .tracklist .addtrack{border-radius:0}
+html[data-uistyle="flat"] .fxc,
+html[data-uistyle="flat"] .fxc-ph,
+html[data-uistyle="flat"] .fx-pick,
+html[data-uistyle="flat"] .fx-pats,
+html[data-uistyle="flat"] .track-menu.fx-menu,
+html[data-uistyle="flat"] .track-menu.mixer-menu,
+html[data-uistyle="flat"] .eq__graph,
+html[data-uistyle="flat"] .rv__unit,
+html[data-uistyle="flat"] .fxc--deriz .deriz__stage,
+html[data-uistyle="flat"] .mp__card,
+html[data-uistyle="flat"] .svov__card,
+html[data-uistyle="flat"] .xpo__card,
+html[data-uistyle="flat"] .pitch-panel,
+html[data-uistyle="flat"] .metro-panel,
+html[data-uistyle="flat"] .upl-card,
+html[data-uistyle="flat"] .add-menu,
+html[data-uistyle="flat"] .clip-card,
+html[data-uistyle="flat"] .tut__bubble,
+html[data-uistyle="flat"] .tut__body,
+html[data-uistyle="flat"] .shop__art{border-radius:var(--flat-r-lg)}
+html[data-uistyle="flat"] .tp-dock,
+html[data-uistyle="flat"] .transportbar .tp-dock{border-radius:var(--flat-r-lg) var(--flat-r-lg) 0 0}
+html[data-uistyle="flat"] .fxc__led,
+html[data-uistyle="flat"] .fxc--cute .fxc__led,
+html[data-uistyle="flat"] .trkcard__power,
+html[data-uistyle="flat"] .tracklist .trkcard__power,
+html[data-uistyle="flat"] .shop__state i,
+html[data-uistyle="flat"] .metro-dots i,
+html[data-uistyle="flat"] .eq__band i,
+html[data-uistyle="flat"] .mp__sw,
+html[data-uistyle="flat"] .tut__tail{border-radius:var(--flat-r-xs)}
+/* slider & meter tipis: ujung hampir lurus */
+html[data-uistyle="flat"] .tracklist .trackmeter,
+html[data-uistyle="flat"] .vsl::before,
+html[data-uistyle="flat"] .vsl__fill,
+html[data-uistyle="flat"] .xpo__bar,
+html[data-uistyle="flat"] .xpo__bar i{border-radius:var(--flat-r-xs)}
