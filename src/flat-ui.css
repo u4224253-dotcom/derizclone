@@ -11,6 +11,7 @@
    TAHAP 1: channel mixer (kolom card track di kiri timeline + menu titik tiga track).
    TAHAP 2: playlist (latar area kerja, ruler, baris track) + grid (garis bar / ketukan / 1/16 ...). Clip / pattern belum diubah.
    TAHAP 3: panel efek (header, tab Plugin/Effect, tombol +, card efek & plugin, knob, EQ, Reverb, ringkasan Delay, menu pilih efek). Kanvas EQ digambar JS dan membaca token --flat-fx-eq-* (src/eq-ui.ts).
+   PALET: semua warna Flat diambil dari gambar referensi (taupe hangat + aksen oranye / teal / ungu / pink / biru), lihat blok --flat-pal-* di bagian 0.
    TAHAP 4: card & navigasi di LUAR plugin (--flat-nv-*): tombol menu pojok, panel menu (kartu, kategori, switch, SAVE, daftar project, profil, shop), card transport + tombol transport,
             panel Pitch & Metronome, card Upload audio / menu tambah track / menu klip, dialog (nama file, ekspor), toolbar pattern, bar keyboard virtual, tutorial. Tuts piano & isi plugin tidak diubah. */
 
@@ -20,24 +21,48 @@ html[data-uistyle="flat"]{
   --flat-r:4px;        /* sudut membulat tipis: tombol, input, switch, item menu (referensi: Ableton Live) */
   --flat-r-lg:6px;     /* card, panel, dialog, menu mengambang */
   --flat-r-xs:2px;     /* penanda kecil (lampu status, titik) */
-  --flat-pal-ink:#1C1D1F;      /* Studio: Hitam */
-  --flat-pal-grip:#55585D;     /* Studio: Grip */
-  --flat-pal-text:#8A8D92;     /* Studio: Teks */
-  --flat-pal-light:#C2C4C7;    /* Studio: Terang */
-  --flat-pal-paper:#E4E5E3;    /* Studio: Kertas */
-  --flat-pal-orange:#FF9F1A;   /* Studio: Oranye */
-  --flat-pal-rec:#FF3D71;      /* Studio: Rec */
-  --flat-pal-ok:#2F9E44;       /* Redam: Rimba */
-  --flat-pal-solo:#FFA529;     /* Klasik: Jingga */
+  /* Palet diambil dari gambar referensi (tema Ableton Live "taupe"). Semua warna Flat berasal dari sini. */
+  /* netral hangat: gelap -> terang */
+  --flat-pal-black:#000000;     /* layar hitam (Scale, MIDI Monitor, kurva) */
+  --flat-pal-ink:#282626;       /* teks utama, tombol Play */
+  --flat-pal-ink2:#484645;      /* tombol toolbar gelap */
+  --flat-pal-grip:#6d665f;      /* teks sekunder, garis tombol */
+  --flat-pal-dim:#7f7468;       /* area kosong di luar loop, garis grid */
+  --flat-pal-text:#918479;      /* teks / tab nonaktif */
+  --flat-pal-light:#a69b90;     /* bingkai jendela, toolbar, garis pemisah */
+  --flat-pal-lane:#bdae9b;      /* baris track, latar panel */
+  --flat-pal-paper:#cdbfad;     /* permukaan utama: browser, ruler, card */
+  --flat-pal-input:#d9cbb9;     /* kolom input, tombol di dalam card */
+  --flat-pal-hi:#e7d8c2;        /* header card, hover */
+  --flat-pal-btn:#eedfc5;       /* tombol terang */
+  --flat-pal-key:#f4e9e0;       /* tuts terang, teks di atas layar hitam */
+  /* warna aksen */
+  --flat-pal-orange:#f19c39;    /* clip oranye, aksen utama */
+  --flat-pal-orange-hi:#f5c262; /* baris terpilih */
+  --flat-pal-orange-note:#e1a14b; /* nada piano roll */
+  --flat-pal-teal:#3a7e78;      /* clip teal */
+  --flat-pal-teal-dark:#64726d;
+  --flat-pal-teal-soft:#a2b0a3; /* baris skala */
+  --flat-pal-purple:#c156d7;    /* clip ungu */
+  --flat-pal-pink:#ce458d;      /* track magenta */
+  --flat-pal-mauve:#a3738c;
+  --flat-pal-plum:#552f45;
+  --flat-pal-blue:#84a0ce;      /* LED, toggle S */
+  --flat-pal-blue-soft:#cad6ea; /* chip terpilih */
+  --flat-pal-blue-deep:#32549b; /* master, tombol utama */
+  --flat-pal-rec:#f9695b;       /* rec, clip, bahaya */
+  --flat-pal-red-soft:#e87263;
+  --flat-pal-ok:#00c140;        /* nyala / hijau */
+  --flat-pal-solo:#84a0ce;      /* solo = biru seperti toggle di referensi */
 }
 
 /* ---------- 1. Token warna Flat (terang) ---------- */
 html[data-uistyle="flat"]{
   /* permukaan */
-  --flat-surface:color-mix(in srgb,var(--flat-pal-paper) 55%,var(--flat-pal-light));        /* dasar kolom mixer */
+  --flat-surface:var(--flat-pal-lane);        /* dasar kolom mixer */
   --flat-head:var(--flat-pal-paper);           /* strip atas (sejajar ruler) */
   --flat-card:var(--flat-pal-paper);           /* card track */
-  --flat-card-hover:color-mix(in srgb,var(--flat-pal-paper) 78%,var(--flat-pal-light));     /* card track tidak terpilih saat disentuh */
+  --flat-card-hover:var(--flat-pal-hi);     /* card track tidak terpilih saat disentuh */
   --flat-line:var(--flat-pal-light);           /* garis pemisah 1px */
   /* teks */
   --flat-text:var(--flat-pal-ink);
@@ -45,8 +70,8 @@ html[data-uistyle="flat"]{
   --flat-on-accent:var(--flat-pal-ink);  /* glyph di atas aksen oranye (tombol nyala) */
   --flat-on-color:var(--flat-pal-ink);       /* glyph di atas warna track yang terang */
   /* kontrol (tombol, slider, knob) */
-  --flat-ctrl:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));
-  --flat-ctrl-hover:color-mix(in srgb,var(--flat-pal-paper) 30%,var(--flat-pal-light));
+  --flat-ctrl:var(--flat-pal-input);
+  --flat-ctrl-hover:var(--flat-pal-hi);
   --flat-ctrl-strong:var(--flat-pal-text);
   --flat-ctrl-on:var(--flat-pal-orange);        /* tombol nyala (auto scroll) */
   --flat-track:var(--flat-pal-light);          /* rel slider */
@@ -58,13 +83,13 @@ html[data-uistyle="flat"]{
   --flat-off:var(--flat-pal-light);
   --flat-danger:var(--flat-pal-rec);
   /* meter level */
-  --flat-meter-bg:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));
-  --flat-meter-empty:rgba(28,29,31,.12);
+  --flat-meter-bg:var(--flat-pal-input);
+  --flat-meter-empty:rgba(40,38,38,.12);
   --flat-meter-ok:var(--flat-pal-ok);
   --flat-meter-warn:var(--flat-pal-orange);
   --flat-meter-clip:var(--flat-pal-rec);
   /* bayangan (hanya untuk menu & drag) */
-  --flat-shadow:rgba(28,29,31,.18);
+  --flat-shadow:rgba(40,38,38,.18);
 }
 
 /* ---------- 2. Kolom channel mixer ---------- */
@@ -177,23 +202,23 @@ html[data-uistyle="flat"] .mixer-menu .track-menu__swatch:focus-visible{border-c
 /* ---------- 5. Token warna Playlist & Grid (terang, terpisah dari token mixer) ---------- */
 html[data-uistyle="flat"]{
   /* permukaan */
-  --flat-pl-bg:color-mix(in srgb,var(--flat-pal-paper) 55%,var(--flat-pal-light));           /* latar area kerja (di bawah baris track terakhir / di luar ujung timeline) */
-  --flat-pl-lane:var(--flat-pal-paper);         /* baris track */
-  --flat-pl-lane-alt:color-mix(in srgb,var(--flat-pal-paper) 80%,var(--flat-pal-light));     /* baris track selang-seling */
+  --flat-pl-bg:var(--flat-pal-dim);           /* latar area kerja (di bawah baris track terakhir / di luar ujung timeline) */
+  --flat-pl-lane:var(--flat-pal-lane);         /* baris track */
+  --flat-pl-lane-alt:var(--flat-pal-paper);     /* baris track selang-seling */
   --flat-pl-ruler:var(--flat-pal-paper);        /* strip ruler (48px, menyambung dengan strip atas mixer) */
   --flat-pl-line:var(--flat-pal-light);         /* garis pemisah baris & garis bawah ruler */
   /* grid: bar = garis solid; ketukan, 1/16, dst = warna dasar (R,G,B) x alpha zoom (--beat-a, --sub-a, --mid-a, --fine-a) x gain */
-  --flat-pl-grid-bar:var(--flat-pal-light);     /* garis tiap bar */
-  --flat-pl-grid:28,29,31;        /* warna dasar garis ketukan & lebih halus (format R,G,B) */
+  --flat-pl-grid-bar:var(--flat-pal-dim);     /* garis tiap bar */
+  --flat-pl-grid:109,102,95;        /* warna dasar garis ketukan & lebih halus (format R,G,B) */
   --flat-pl-grid-gain:3.6;        /* pengali alpha zoom: latar terang butuh garis lebih pekat daripada latar gelap */
   /* ruler (dibaca juga oleh main.ts untuk canvas) */
-  --flat-pl-tick-a:#55585D;       /* tick bar + angka */
-  --flat-pl-tick-b:#8A8D92;       /* tick ketukan + label ketukan */
-  --flat-pl-tick-c:#C2C4C7;       /* tick 1/16 + label 1/16 */
+  --flat-pl-tick-a:#6d665f;       /* tick bar + angka */
+  --flat-pl-tick-b:#918479;       /* tick ketukan + label ketukan */
+  --flat-pl-tick-c:#a69b90;       /* tick 1/16 + label 1/16 */
   /* penunjuk */
   --flat-pl-play:var(--flat-pal-rec);         /* playhead */
-  --flat-pl-focus:var(--flat-pal-orange);        /* baris target saat drop / seret */
-  --flat-pl-shadow:rgba(28,29,31,.18);
+  --flat-pl-focus:var(--flat-pal-teal);        /* baris target saat drop / seret */
+  --flat-pl-shadow:rgba(40,38,38,.18);
 }
 
 /* ---------- 6. Latar playlist ---------- */
@@ -227,15 +252,15 @@ html[data-uistyle="flat"] .playhead{color:var(--flat-pl-play)}
 /* ---------- 9. Token warna Panel Efek (terang, terpisah dari token mixer & playlist; hanya merujuk ke --flat-pal-*) ---------- */
 html[data-uistyle="flat"]{
   /* permukaan */
-  --flat-fx-bg:color-mix(in srgb,var(--flat-pal-paper) 55%,var(--flat-pal-light));          /* latar panel */
+  --flat-fx-bg:var(--flat-pal-lane);          /* latar panel */
   --flat-fx-head:var(--flat-pal-paper);         /* strip judul (48px, sejajar ruler & strip atas mixer) */
   --flat-fx-card:var(--flat-pal-paper);         /* card efek / plugin */
-  --flat-fx-card-hover:color-mix(in srgb,var(--flat-pal-paper) 78%,var(--flat-pal-light));
-  --flat-fx-inset:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));       /* lapisan di dalam card: tab, bar EQ, ringkasan Delay */
-  --flat-fx-inset-hover:color-mix(in srgb,var(--flat-pal-paper) 30%,var(--flat-pal-light));
+  --flat-fx-card-hover:var(--flat-pal-hi);
+  --flat-fx-inset:var(--flat-pal-input);       /* lapisan di dalam card: tab, bar EQ, ringkasan Delay */
+  --flat-fx-inset-hover:var(--flat-pal-hi);
   --flat-fx-line:var(--flat-pal-light);         /* garis pemisah 1px */
-  --flat-fx-screen:var(--flat-pal-ink);         /* layar gelap (kanvas DERIZ, bagian atas Reverb) */
-  --flat-fx-on-screen:var(--flat-pal-paper);    /* garis / tombol di atas layar gelap */
+  --flat-fx-screen:var(--flat-pal-black);         /* layar gelap (kanvas DERIZ, bagian atas Reverb) */
+  --flat-fx-on-screen:var(--flat-pal-key);    /* garis / tombol di atas layar gelap */
   /* teks */
   --flat-fx-text:var(--flat-pal-ink);
   --flat-fx-muted:var(--flat-pal-grip);
@@ -248,21 +273,21 @@ html[data-uistyle="flat"]{
   --flat-fx-knob:var(--flat-pal-text);          /* isi knob */
   --flat-fx-focus:var(--flat-pal-orange);
   --flat-fx-danger:var(--flat-pal-rec);
-  --flat-fx-shadow:rgba(28,29,31,.18);          /* hanya untuk menu / picker / panel di layar sempit */
+  --flat-fx-shadow:rgba(40,38,38,.18);          /* hanya untuk menu / picker / panel di layar sempit */
   /* kanvas EQ (dibaca src/eq-ui.ts; 5 band = rendah -> tinggi) */
-  --flat-fx-eq-bg:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));
-  --flat-fx-eq-grid:color-mix(in srgb,var(--flat-pal-ink) 12%,transparent);
-  --flat-fx-eq-grid-zero:color-mix(in srgb,var(--flat-pal-ink) 40%,transparent);
-  --flat-fx-eq-label:var(--flat-pal-grip);
-  --flat-fx-eq-spec:var(--flat-pal-text);       /* spektrum hidup */
-  --flat-fx-eq-curve:var(--flat-pal-ink);       /* kurva total */
-  --flat-fx-eq-curve-off:var(--flat-pal-text);  /* kurva saat efek mati */
-  --flat-fx-eq-ring:var(--flat-pal-paper);      /* bingkai node */
-  --flat-fx-eq-band-1:var(--flat-pal-grip);
-  --flat-fx-eq-band-2:var(--flat-pal-ok);
+  --flat-fx-eq-bg:var(--flat-pal-black);
+  --flat-fx-eq-grid:color-mix(in srgb,var(--flat-pal-key) 14%,transparent);
+  --flat-fx-eq-grid-zero:color-mix(in srgb,var(--flat-pal-key) 40%,transparent);
+  --flat-fx-eq-label:var(--flat-pal-light);
+  --flat-fx-eq-spec:var(--flat-pal-teal-dark);       /* spektrum hidup */
+  --flat-fx-eq-curve:var(--flat-pal-key);       /* kurva total */
+  --flat-fx-eq-curve-off:var(--flat-pal-dim);  /* kurva saat efek mati */
+  --flat-fx-eq-ring:var(--flat-pal-black);      /* bingkai node */
+  --flat-fx-eq-band-1:var(--flat-pal-blue);
+  --flat-fx-eq-band-2:var(--flat-pal-teal);
   --flat-fx-eq-band-3:var(--flat-pal-orange);
-  --flat-fx-eq-band-4:var(--flat-pal-rec);
-  --flat-fx-eq-band-5:var(--flat-pal-text);
+  --flat-fx-eq-band-4:var(--flat-pal-pink);
+  --flat-fx-eq-band-5:var(--flat-pal-purple);
 }
 
 /* ---------- 10. Kerangka panel: latar, header, tab Plugin/Effect, tombol +, panah buka/tutup ---------- */
@@ -464,14 +489,14 @@ html[data-uistyle="flat"] .fx-pats__empty{color:var(--flat-fx-muted)}
 
 /* ---------- 18. Token warna Navigasi & Card (terang; hanya merujuk ke --flat-pal-*, tidak merujuk token mixer / playlist / efek) ---------- */
 html[data-uistyle="flat"]{
-  --flat-nv-bg:color-mix(in srgb,var(--flat-pal-paper) 55%,var(--flat-pal-light));          /* latar panel menu, bar keyboard */
-  --flat-nv-head:var(--flat-pal-paper);         /* strip judul panel menu, card transport */
+  --flat-nv-bg:var(--flat-pal-lane);          /* latar panel menu, bar keyboard */
+  --flat-nv-head:var(--flat-pal-light);         /* strip judul panel menu, card transport */
   --flat-nv-card:var(--flat-pal-paper);         /* card / dialog / menu mengambang */
-  --flat-nv-card-hover:color-mix(in srgb,var(--flat-pal-paper) 78%,var(--flat-pal-light));
-  --flat-nv-inset:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));       /* tombol / input di dalam card */
-  --flat-nv-inset-hover:color-mix(in srgb,var(--flat-pal-paper) 30%,var(--flat-pal-light));
+  --flat-nv-card-hover:var(--flat-pal-hi);
+  --flat-nv-inset:var(--flat-pal-input);       /* tombol / input di dalam card */
+  --flat-nv-inset-hover:var(--flat-pal-hi);
   --flat-nv-line:var(--flat-pal-light);         /* garis pemisah 1px */
-  --flat-nv-line-strong:var(--flat-pal-text);   /* garis tombol outline */
+  --flat-nv-line-strong:var(--flat-pal-grip);   /* garis tombol outline */
   --flat-nv-text:var(--flat-pal-ink);
   --flat-nv-muted:var(--flat-pal-grip);
   --flat-nv-accent:var(--flat-pal-orange);      /* nyala / aktif / progres */
@@ -482,8 +507,8 @@ html[data-uistyle="flat"]{
   --flat-nv-ok:var(--flat-pal-ok);
   --flat-nv-danger:var(--flat-pal-rec);
   --flat-nv-focus:var(--flat-pal-orange);
-  --flat-nv-shadow:rgba(28,29,31,.18);
-  --flat-nv-scrim:rgba(28,29,31,.4);
+  --flat-nv-shadow:rgba(40,38,38,.18);
+  --flat-nv-scrim:color-mix(in srgb,var(--flat-pal-plum) 45%,transparent);
 }
 
 /* ---------- 19. Navigasi: tombol menu pojok, layar penuh, tutorial ---------- */
@@ -803,3 +828,34 @@ html[data-uistyle="flat"] .vsl::before,
 html[data-uistyle="flat"] .vsl__fill,
 html[data-uistyle="flat"] .xpo__bar,
 html[data-uistyle="flat"] .xpo__bar i{border-radius:var(--flat-r-xs)}
+
+/* ---------- 29. Pemakaian warna aksen dari gambar referensi ---------- */
+/* chip / segmen terpilih = biru muda (seperti "Notator Swing"), tetap ada strip oranye di dasar */
+html[data-uistyle="flat"] .mp__segbtn.is-on{background:var(--flat-pal-blue-soft);color:var(--flat-nv-text)}
+/* tombol utama = biru tua (seperti Master) */
+html[data-uistyle="flat"] .mp__prim,
+html[data-uistyle="flat"] .svov__btn--ok,
+html[data-uistyle="flat"] .plg__btn{background:var(--flat-pal-blue-deep);color:var(--flat-pal-key)}
+html[data-uistyle="flat"] .mp__prim:hover,
+html[data-uistyle="flat"] .svov__btn--ok:hover,
+html[data-uistyle="flat"] .plg__btn:hover:not(:disabled){background:var(--flat-pal-blue);color:var(--flat-pal-ink)}
+html[data-uistyle="flat"] .plg__btn--ghost{background:transparent;color:var(--flat-nv-text)}
+/* tombol Play & Save & Export = hitam hangat */
+html[data-uistyle="flat"] .transportbar .play,
+html[data-uistyle="flat"] .mp__savebtn,
+html[data-uistyle="flat"] .mp__expbtn{background:var(--flat-pal-ink);border-color:var(--flat-pal-ink);color:var(--flat-pal-key)}
+html[data-uistyle="flat"] .transportbar .play:hover:not(:disabled),
+html[data-uistyle="flat"] .mp__savebtn:hover,
+html[data-uistyle="flat"] .mp__savebtn:active,
+html[data-uistyle="flat"] .mp__expbtn:hover,
+html[data-uistyle="flat"] .mp__expbtn:active{background:var(--flat-pal-ink2);border-color:var(--flat-pal-ink2)}
+/* tutorial: cincin sorot pink, tag shop mauve */
+html[data-uistyle="flat"] .tut__ring{border-color:var(--flat-pal-pink)}
+html[data-uistyle="flat"] .shop__tag{color:var(--flat-pal-mauve);border-color:var(--flat-pal-mauve)}
+/* avatar profil = ungu */
+html[data-uistyle="flat"] .mp__ava{background:var(--flat-pal-purple);color:var(--flat-pal-key)}
+html[data-uistyle="flat"] .mp__profcat > .mp__ava:first-child{color:var(--flat-pal-key)}
+/* baris terpilih di daftar project = oranye muda */
+html[data-uistyle="flat"] .mp__open:hover,
+html[data-uistyle="flat"] .mp__open:focus-visible{background:var(--flat-pal-orange-hi)}
+/* baris skala / nada: dipakai plugin & piano roll nanti; token tersedia lewat --flat-pal-teal-soft / --flat-pal-orange-note */
