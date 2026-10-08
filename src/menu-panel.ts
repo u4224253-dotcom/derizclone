@@ -146,7 +146,7 @@ export function initMenuPanel(): MenuPanel {
             '</div>' +
           '</div>' +
           // Gaya UI (bentuk sudut): tersembunyi, dibuka dengan menahan judul "Menu" di bagian atas panel
-          '<div class="mp__card mp__item mp__set" style="--i:2" data-uistyle-card hidden>' +
+          '<div class="mp__card mp__item mp__set" style="--i:2" data-uistyle-card>' +
             '<div class="mp__sub"><span>Gaya UI</span></div>' +
             '<div class="mp__seg" role="radiogroup" aria-label="Gaya UI">' +
               '<button type="button" class="mp__segbtn" role="radio" data-uistyle="soft">Default</button>' +
@@ -276,9 +276,7 @@ export function initMenuPanel(): MenuPanel {
   setTheme(themeSaved, false);
 
   // ===== Pengaturan: Gaya UI (atribut data-uistyle di <html>: soft = bawaan, flat = sudut lancip) =====
-  // Kartu pilihannya tersembunyi. Buka/tutup dengan menahan judul "Menu" di bagian atas panel (status buka disimpan).
-  const STYLE_KEY = 'derizmp3.uistyle', STYLE_UNLOCK_KEY = 'derizmp3.uistyle.unlock';
-  const styleCard = panel.querySelector<HTMLElement>('[data-uistyle-card]') as HTMLElement;
+  const STYLE_KEY = 'derizmp3.uistyle';
   const styleBtns = [...panel.querySelectorAll<HTMLButtonElement>('[data-uistyle]')];
   const setUiStyle = (v: string, save: boolean): void => {
     const val = v === 'flat' ? 'flat' : 'soft';
@@ -288,34 +286,9 @@ export function initMenuPanel(): MenuPanel {
     if (save) { try { localStorage.setItem(STYLE_KEY, val); } catch { /* penyimpanan diblokir: tetap berlaku sampai halaman ditutup */ } }
   };
   styleBtns.forEach(b => b.addEventListener('click', () => setUiStyle(b.dataset.uistyle as string, true)));
-  let styleSaved = 'soft', styleUnlocked = false;
-  try {
-    styleSaved = localStorage.getItem(STYLE_KEY) || 'soft'; styleUnlocked = localStorage.getItem(STYLE_UNLOCK_KEY) === '1';
-    // cadangan kalau klik-tahan tidak jalan di suatu perangkat: buka aplikasi dengan ?uistyle=buka (atau ?uistyle=tutup untuk menyembunyikan lagi)
-    const uq = new URLSearchParams(location.search).get('uistyle');
-    if (uq === 'buka' || uq === 'tutup') { styleUnlocked = uq === 'buka'; localStorage.setItem(STYLE_UNLOCK_KEY, styleUnlocked ? '1' : '0'); }
-  } catch { /* abaikan */ }
-  styleCard.hidden = !styleUnlocked;
+  let styleSaved = 'soft';
+  try { styleSaved = localStorage.getItem(STYLE_KEY) || 'soft'; } catch { /* abaikan */ }
   setUiStyle(styleSaved, false);
-  // klik-tahan judul di bagian atas panel (± 0,7 detik) = tampilkan / sembunyikan kartu Gaya UI; judul ini bukan tombol, jadi tidak bentrok dengan klik apa pun
-  const setGo = panel.querySelector<HTMLElement>('.mp__title') as HTMLElement;
-  let styleHoldT = 0, styleHoldX = 0, styleHoldY = 0;
-  const styleHoldClear = (): void => { if (styleHoldT) { clearTimeout(styleHoldT); styleHoldT = 0; } };
-  setGo.addEventListener('pointerdown', e => {
-    styleHoldClear(); styleHoldX = e.clientX; styleHoldY = e.clientY;
-    styleHoldT = window.setTimeout(() => {
-      styleHoldT = 0;
-      styleUnlocked = !styleUnlocked;
-      styleCard.hidden = !styleUnlocked;
-      try { localStorage.setItem(STYLE_UNLOCK_KEY, styleUnlocked ? '1' : '0'); } catch { /* abaikan */ }
-      if (navigator.vibrate) { try { navigator.vibrate(18); } catch { /* abaikan */ } }
-      io && io.toast(styleUnlocked ? 'Pilihan Gaya UI dibuka di Pengaturan' : 'Pilihan Gaya UI disembunyikan', 1800);
-    }, 700);
-  });
-  setGo.addEventListener('pointermove', e => { if (styleHoldT && Math.hypot(e.clientX - styleHoldX, e.clientY - styleHoldY) > 10) styleHoldClear(); });
-  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => setGo.addEventListener(ev, styleHoldClear));
-  // di Android, tahan lama memicu menu konteks / seleksi teks bawaan browser yang membatalkan pointer (pointercancel) sebelum 0,7 detik; tahan itu dimatikan di judul ini
-  setGo.addEventListener('contextmenu', e => e.preventDefault());
 
   // Tombol rahasia pindah Gaya UI (Default <-> Flat): tak terlihat, di pojok kanan-bawah halaman utama Menu (lihat .mp__uisw di styles.css).
   // Sekali tap langsung ganti gaya, tanpa membuka kartu di Pengaturan. Disembunyikan dari pembaca layar dan tidak ikut urutan Tab.
