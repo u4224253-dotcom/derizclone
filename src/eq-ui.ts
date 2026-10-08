@@ -6,6 +6,34 @@ import { EQ_BANDS, eqDb, eqHz, eqQ, eqFreqV, eqQV, EQ_RANGE_DB, type EqBand } fr
 type V = Record<string, number>;
 
 export const EQ_COLORS = ['#4f86f7', '#25b99a', '#f0a92b', '#ee6a68', '#9b62e3'];
+// Palet kanvas EQ. Default (soft) = warna bawaan seperti sebelumnya, tidak berubah. Gaya Flat membaca token --flat-fx-eq-* dari flat-ui.css
+// (satu sumber warna, tidak di-hardcode di sini); hasilnya disimpan supaya getComputedStyle tidak dipanggil tiap frame spektrum.
+interface EqPal { flat: boolean; bg: [string, string]; gridX: string; labelX: string; gridY: string; gridZero: string; labelY: string; specFill: [string, string]; specLine: string; area: [string, string]; halo: string; line: string; lineOff: string; ring: string; bands: string[] }
+const EQ_SOFT: EqPal = {
+  flat: false, bg: ['#e9f0f7', '#b7c8da'], gridX: 'rgba(70,100,135,.16)', labelX: 'rgba(52,78,108,.78)', gridY: 'rgba(70,100,135,.14)', gridZero: 'rgba(52,78,108,.38)', labelY: 'rgba(52,78,108,.62)',
+  specFill: ['rgba(70,98,132,.50)', 'rgba(70,98,132,.10)'], specLine: 'rgba(58,86,120,.55)', area: ['rgba(255,255,255,.55)', 'rgba(255,255,255,.08)'], halo: 'rgba(255,255,255,.35)', line: '#ffffff', lineOff: 'rgba(255,255,255,.6)', ring: '#fff', bands: EQ_COLORS
+};
+let eqPalFlat: EqPal | null = null;
+window.addEventListener('derizmp3:ui', () => { eqPalFlat = null; });
+function eqPal(): EqPal {
+  const root = document.documentElement;
+  if (root.dataset.uistyle !== 'flat') return EQ_SOFT;
+  if (eqPalFlat) return eqPalFlat;
+  const cs = getComputedStyle(root), probe = document.createElement('i'); probe.style.display = 'none'; root.appendChild(probe);
+  const tk = (n: string, fb: string): string => {   // token -> warna yang sudah di-resolve (color-mix / var ikut terurai), cadangan jika token tidak ada
+    const raw = cs.getPropertyValue(n).trim(); if (!raw) return fb;
+    probe.style.color = ''; probe.style.color = raw;
+    return probe.style.color ? getComputedStyle(probe).color : fb;
+  };
+  const grid = tk('--flat-fx-eq-grid', 'rgba(28,29,31,.12)'), spec = tk('--flat-fx-eq-spec', '#8A8D92'), curve = tk('--flat-fx-eq-curve', '#1C1D1F');
+  eqPalFlat = {
+    flat: true, bg: [tk('--flat-fx-eq-bg', '#D3D4D3'), tk('--flat-fx-eq-bg', '#D3D4D3')], gridX: grid, labelX: tk('--flat-fx-eq-label', '#55585D'), gridY: grid, gridZero: tk('--flat-fx-eq-grid-zero', 'rgba(28,29,31,.4)'), labelY: tk('--flat-fx-eq-label', '#55585D'),
+    specFill: [spec, spec], specLine: spec, area: [curve, curve], halo: 'rgba(0,0,0,0)', line: curve, lineOff: tk('--flat-fx-eq-curve-off', '#8A8D92'), ring: tk('--flat-fx-eq-ring', '#E4E5E3'),
+    bands: [1, 2, 3, 4, 5].map(i => tk('--flat-fx-eq-band-' + i, EQ_COLORS[i - 1]))
+  };
+  probe.remove();
+  return eqPalFlat;
+}
 const FMIN = 20, FMAX = 20000, PAD_X = 12, PAD_Y = 16, FS = 48000, NODE_HIT = 22;
 const GRID_HZ: Array<[number, string]> = [[50, '50'], [100, '100'], [200, '200'], [500, '500'], [1000, '1k'], [2000, '2k'], [5000, '5k'], [10000, '10k']];
 const LOGSPAN = Math.log(FMAX / FMIN);
@@ -79,7 +107,7 @@ export function specActive(spec: EqSpec): boolean {   // false kalau semuanya se
   for (let i = 0; i < spec.db.length; i += 4) if (spec.db[i] > SPEC_LO - 6) return true;
   return false;
 }
-function paintSpectrum(g: CanvasRenderingContext2D, spec: EqSpec, w: number, h: number): void {
+function paintSpectrum(g: CanvasRenderingContext2D, spec: EqSpec, w: number, h: number, P: EqPal): void {
   const x0 = PAD_X, x1 = w - PAD_X, top = 18, base = h, span = base - top;
   const pts: Array<[number, number]> = [];
   for (let x = x0; x <= x1 + 0.1; x += 2) {
@@ -91,9 +119,9 @@ function paintSpectrum(g: CanvasRenderingContext2D, spec: EqSpec, w: number, h: 
   const path = (): void => { g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length - 1; i++) { const mx = (pts[i][0] + pts[i + 1][0]) / 2, my = (pts[i][1] + pts[i + 1][1]) / 2; g.quadraticCurveTo(pts[i][0], pts[i][1], mx, my); } g.lineTo(pts[pts.length - 1][0], pts[pts.length - 1][1]); };
   g.save(); g.beginPath(); g.rect(0, 12, w, h - 12); g.clip();
   path(); g.lineTo(x1, base); g.lineTo(x0, base); g.closePath();
-  const fill = g.createLinearGradient(0, top, 0, base); fill.addColorStop(0, 'rgba(70,98,132,.50)'); fill.addColorStop(1, 'rgba(70,98,132,.10)');
-  g.fillStyle = fill; g.fill();
-  path(); g.lineJoin = 'round'; g.lineWidth = 1.2; g.strokeStyle = 'rgba(58,86,120,.55)'; g.stroke();
+  const fill = g.createLinearGradient(0, top, 0, base); fill.addColorStop(0, P.specFill[0]); fill.addColorStop(1, P.specFill[1]);
+  g.globalAlpha = P.flat ? .28 : 1; g.fillStyle = fill; g.fill(); g.globalAlpha = 1;
+  path(); g.lineJoin = 'round'; g.lineWidth = 1.2; g.strokeStyle = P.specLine; g.stroke();
   g.restore();
 }
 
@@ -103,10 +131,10 @@ export function paintEqCanvas(cv: HTMLCanvasElement, v: V, on: boolean, sel: num
   if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; }
   const g = cv.getContext('2d'); if (!g) return;
   g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
-  const zero = yOf(0, h);
+  const zero = yOf(0, h), P = eqPal();
 
-  // latar: gradasi biru-abu lembut
-  const bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#e9f0f7'); bg.addColorStop(1, '#b7c8da');
+  // latar: gradasi biru-abu lembut (Flat: warna solid dari token)
+  const bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, P.bg[0]); bg.addColorStop(1, P.bg[1]);
   g.fillStyle = bg; g.fillRect(0, 0, w, h);
 
   // grid frekuensi + label di atas
@@ -114,20 +142,20 @@ export function paintEqCanvas(cv: HTMLCanvasElement, v: V, on: boolean, sel: num
   const wide = w >= 330;   // grafik sempit: hanya 100 / 1k / 10k yang diberi label supaya tidak bertumpuk
   for (const [hz, label] of GRID_HZ) {
     const x = Math.round(xOf(hz, w)) + .5;
-    g.strokeStyle = 'rgba(70,100,135,.16)'; g.lineWidth = 1; g.beginPath(); g.moveTo(x, 14); g.lineTo(x, h); g.stroke();
-    if (wide || hz === 100 || hz === 1000 || hz === 10000) { g.fillStyle = 'rgba(52,78,108,.78)'; g.fillText(label, x, 3); }
+    g.strokeStyle = P.gridX; g.lineWidth = 1; g.beginPath(); g.moveTo(x, 14); g.lineTo(x, h); g.stroke();
+    if (wide || hz === 100 || hz === 1000 || hz === 10000) { g.fillStyle = P.labelX; g.fillText(label, x, 3); }
   }
   // grid gain: ±6 dan ±12 dB, garis 0 dB lebih tegas
   g.textAlign = 'right'; g.textBaseline = 'middle';
   for (const db of [12, 6, 0, -6, -12]) {
     const y = Math.round(yOf(db, h)) + .5;
-    g.strokeStyle = db === 0 ? 'rgba(52,78,108,.38)' : 'rgba(70,100,135,.14)'; g.lineWidth = 1;
+    g.strokeStyle = db === 0 ? P.gridZero : P.gridY; g.lineWidth = 1;
     g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke();
-    if (db !== 12 && db !== -12) { g.fillStyle = 'rgba(52,78,108,.62)'; g.fillText(db > 0 ? '+' + db : db === 0 ? '0' : '\u2212' + -db, w - 4, y - 7); }
+    if (db !== 12 && db !== -12) { g.fillStyle = P.labelY; g.fillText(db > 0 ? '+' + db : db === 0 ? '0' : '\u2212' + -db, w - 4, y - 7); }
   }
 
   // spektrum hidup: isi abu-biru lembut yang naik-turun mengikuti audio (satu titik tiap 2 px, skala frekuensi log sama dengan grid)
-  if (spec) paintSpectrum(g, spec, w, h);
+  if (spec) paintSpectrum(g, spec, w, h, P);
 
   // respons per band + total (dalam dB, dijumlahkan)
   const N = Math.max(60, Math.round(w / 3)), vals = EQ_BANDS.map(b => bandVals(v, b));
@@ -144,21 +172,22 @@ export function paintEqCanvas(cv: HTMLCanvasElement, v: V, on: boolean, sel: num
   // band terpilih: isi tipis berwarna dari garis 0 dB
   g.save(); g.beginPath(); g.rect(0, 12, w, h - 12); g.clip();
   curve(one); g.lineTo(px(N), zero); g.lineTo(px(0), zero); g.closePath();
-  g.fillStyle = EQ_COLORS[sel] + '38'; g.fill();
+  if (P.flat) { g.globalAlpha = .2; g.fillStyle = P.bands[sel]; } else g.fillStyle = P.bands[sel] + '38';
+  g.fill(); g.globalAlpha = 1;
   // kurva total: isi putih memudar + garis putih halus
-  const area = g.createLinearGradient(0, 0, 0, h); area.addColorStop(0, 'rgba(255,255,255,.55)'); area.addColorStop(1, 'rgba(255,255,255,.08)');
-  curve(total); g.lineTo(px(N), zero); g.lineTo(px(0), zero); g.closePath(); g.fillStyle = area; g.fill();
-  curve(total); g.lineJoin = 'round'; g.lineWidth = 5; g.strokeStyle = 'rgba(255,255,255,.35)'; g.stroke();
-  curve(total); g.lineWidth = 2.2; g.strokeStyle = on ? '#ffffff' : 'rgba(255,255,255,.6)'; g.stroke();
+  const area = g.createLinearGradient(0, 0, 0, h); area.addColorStop(0, P.area[0]); area.addColorStop(1, P.area[1]);
+  curve(total); g.lineTo(px(N), zero); g.lineTo(px(0), zero); g.closePath(); g.globalAlpha = P.flat ? .08 : 1; g.fillStyle = area; g.fill(); g.globalAlpha = 1;
+  if (!P.flat) { curve(total); g.lineJoin = 'round'; g.lineWidth = 5; g.strokeStyle = P.halo; g.stroke(); }   // halo lembut hanya di Default; Flat = garis tegas tanpa glow
+  curve(total); g.lineJoin = 'round'; g.lineWidth = P.flat ? 2 : 2.2; g.strokeStyle = on ? P.line : P.lineOff; g.stroke();
   g.restore();
 
   // node
   vals.forEach((bv, i) => {
     const x = xOf(bv.hz, w), y = yOf(bv.db, h), s = i === sel;
     g.globalAlpha = on ? 1 : .55;
-    if (s) { g.beginPath(); g.arc(x, y, 13, 0, Math.PI * 2); g.fillStyle = EQ_COLORS[i] + '30'; g.fill(); }
-    g.beginPath(); g.arc(x, y, s ? 7.5 : 5.5, 0, Math.PI * 2);
-    g.fillStyle = EQ_COLORS[i]; g.fill(); g.lineWidth = s ? 2.5 : 2; g.strokeStyle = '#fff'; g.stroke();
+    if (s && !P.flat) { g.beginPath(); g.arc(x, y, 13, 0, Math.PI * 2); g.fillStyle = P.bands[i] + '30'; g.fill(); }
+    if (P.flat) { const r = s ? 7 : 5; g.beginPath(); g.rect(x - r, y - r, r * 2, r * 2); g.fillStyle = P.bands[i]; g.fill(); g.lineWidth = s ? 2.5 : 2; g.strokeStyle = P.ring; g.stroke(); }   // Flat: node kotak
+    else { g.beginPath(); g.arc(x, y, s ? 7.5 : 5.5, 0, Math.PI * 2); g.fillStyle = P.bands[i]; g.fill(); g.lineWidth = s ? 2.5 : 2; g.strokeStyle = P.ring; g.stroke(); }
     g.globalAlpha = 1;
   });
 }

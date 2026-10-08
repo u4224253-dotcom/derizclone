@@ -1418,6 +1418,7 @@ export function initFxRack(host: () => AudioHost, patterns?: PatternBridge): FxR
   };
   specKick = (): void => { specLive = true; if (!specRaf) specRaf = requestAnimationFrame(specTick); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden) specKick(); });
+  window.addEventListener('derizmp3:ui', () => { for (const c of document.querySelectorAll<HTMLElement>('.fxc--eq')) { const fx = find(c); if (fx) paintEq(c, fx); } });   // ganti Gaya UI: kanvas EQ menggambar ulang dengan palet baru
 
   // ---------- DERIZ: upload audio ke canvas (tombol, "Ganti", atau drag & drop file) ----------
   async function loadDeriz(card: HTMLElement, file: File): Promise<void> {

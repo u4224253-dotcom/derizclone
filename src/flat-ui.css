@@ -7,8 +7,10 @@
    4. Grup token dipisah per area: --flat-*    = channel mixer (tahap 1)
                                     --flat-pl-* = playlist & grid (tahap 2). Nilainya boleh sama dengan token mixer, tapi tidak saling merujuk,
                                                   jadi mengubah warna playlist tidak menggeser mixer (dan sebaliknya).
+                                    --flat-fx-* = panel efek di kanan (tahap 3). Sama: hanya merujuk ke --flat-pal-*, tidak merujuk token mixer / playlist.
    TAHAP 1: channel mixer (kolom card track di kiri timeline + menu titik tiga track).
-   TAHAP 2: playlist (latar area kerja, ruler, baris track) + grid (garis bar / ketukan / 1/16 ...). Clip / pattern belum diubah. */
+   TAHAP 2: playlist (latar area kerja, ruler, baris track) + grid (garis bar / ketukan / 1/16 ...). Clip / pattern belum diubah.
+   TAHAP 3: panel efek (header, tab Plugin/Effect, tombol +, card efek & plugin, knob, EQ, Reverb, ringkasan Delay, menu pilih efek). Kanvas EQ digambar JS dan membaca token --flat-fx-eq-* (src/eq-ui.ts). */
 
 /* ---------- 0. Palet dasar Flat (dari src/palettes.ts: "Studio Netral" + Klasik/Redam untuk status) ----------
    Hanya nilai mentah. Token --flat-* / --flat-pl-* di bawah merujuk ke sini; untuk ganti warna Flat cukup ubah baris ini atau pemetaan tokennya. */
@@ -211,3 +213,238 @@ html[data-uistyle="flat"] .lanes .lane.is-reordering{filter:none;box-shadow:0 0 
 
 /* ---------- 8. Playhead ---------- */
 html[data-uistyle="flat"] .playhead{color:var(--flat-pl-play)}
+
+/* ================================================================================================
+   TAHAP 3: PANEL EFEK (kolom kanan: Effects, tab Plugin / Effect, tombol +, card efek & plugin, menu pilih efek)
+   Selector card (.fxc) tidak dibatasi ke .fx, jadi card yang dimaksimalkan ke jendela tengah layar ikut Flat; jendela (.derizov) itu sendiri belum diubah.
+   ================================================================================================ */
+
+/* ---------- 9. Token warna Panel Efek (terang, terpisah dari token mixer & playlist; hanya merujuk ke --flat-pal-*) ---------- */
+html[data-uistyle="flat"]{
+  /* permukaan */
+  --flat-fx-bg:color-mix(in srgb,var(--flat-pal-paper) 55%,var(--flat-pal-light));          /* latar panel */
+  --flat-fx-head:var(--flat-pal-paper);         /* strip judul (48px, sejajar ruler & strip atas mixer) */
+  --flat-fx-card:var(--flat-pal-paper);         /* card efek / plugin */
+  --flat-fx-card-hover:color-mix(in srgb,var(--flat-pal-paper) 78%,var(--flat-pal-light));
+  --flat-fx-inset:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));       /* lapisan di dalam card: tab, bar EQ, ringkasan Delay */
+  --flat-fx-inset-hover:color-mix(in srgb,var(--flat-pal-paper) 30%,var(--flat-pal-light));
+  --flat-fx-line:var(--flat-pal-light);         /* garis pemisah 1px */
+  --flat-fx-screen:var(--flat-pal-ink);         /* layar gelap (kanvas DERIZ, bagian atas Reverb) */
+  --flat-fx-on-screen:var(--flat-pal-paper);    /* garis / tombol di atas layar gelap */
+  /* teks */
+  --flat-fx-text:var(--flat-pal-ink);
+  --flat-fx-muted:var(--flat-pal-grip);
+  --flat-fx-on-accent:var(--flat-pal-ink);      /* glyph di atas aksen oranye */
+  /* kontrol */
+  --flat-fx-accent:var(--flat-pal-orange);      /* switch nyala, arc knob, tab aktif, strip plugin */
+  --flat-fx-off:var(--flat-pal-light);          /* switch mati, rel slider */
+  --flat-fx-strong:var(--flat-pal-ink);         /* tombol +, thumb slider */
+  --flat-fx-on-strong:var(--flat-pal-paper);
+  --flat-fx-knob:var(--flat-pal-text);          /* isi knob */
+  --flat-fx-focus:var(--flat-pal-orange);
+  --flat-fx-danger:var(--flat-pal-rec);
+  --flat-fx-shadow:rgba(28,29,31,.18);          /* hanya untuk menu / picker / panel di layar sempit */
+  /* kanvas EQ (dibaca src/eq-ui.ts; 5 band = rendah -> tinggi) */
+  --flat-fx-eq-bg:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));
+  --flat-fx-eq-grid:color-mix(in srgb,var(--flat-pal-ink) 12%,transparent);
+  --flat-fx-eq-grid-zero:color-mix(in srgb,var(--flat-pal-ink) 40%,transparent);
+  --flat-fx-eq-label:var(--flat-pal-grip);
+  --flat-fx-eq-spec:var(--flat-pal-text);       /* spektrum hidup */
+  --flat-fx-eq-curve:var(--flat-pal-ink);       /* kurva total */
+  --flat-fx-eq-curve-off:var(--flat-pal-text);  /* kurva saat efek mati */
+  --flat-fx-eq-ring:var(--flat-pal-paper);      /* bingkai node */
+  --flat-fx-eq-band-1:var(--flat-pal-grip);
+  --flat-fx-eq-band-2:var(--flat-pal-ok);
+  --flat-fx-eq-band-3:var(--flat-pal-orange);
+  --flat-fx-eq-band-4:var(--flat-pal-rec);
+  --flat-fx-eq-band-5:var(--flat-pal-text);
+}
+
+/* ---------- 10. Kerangka panel: latar, header, tab Plugin/Effect, tombol +, panah buka/tutup ---------- */
+html[data-uistyle="flat"] .fx__panel{background:var(--flat-fx-bg);border-left:1px solid var(--flat-fx-line);color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fx__head{background:var(--flat-fx-head);border-bottom:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .fx__title{color:var(--flat-fx-text)}
+
+html[data-uistyle="flat"] .fx__pages{border-radius:0;background:var(--flat-fx-inset);border:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .fx__pages::before{border-radius:0;background:var(--flat-fx-card);box-shadow:inset 0 -2px 0 var(--flat-fx-accent)}
+html[data-uistyle="flat"] .fx__page{border-radius:0;color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fx__page:hover,
+html[data-uistyle="flat"] .fx__page[aria-selected="true"]{color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fx__page:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:-2px}
+
+/* tombol +: kotak solid, tanpa bayangan & tanpa membesar */
+html[data-uistyle="flat"] .fx__add{border-radius:0;background:var(--flat-fx-strong);color:var(--flat-fx-on-strong);box-shadow:none;transition:background-color .15s ease,opacity .2s ease}
+html[data-uistyle="flat"] .fx__add:hover{transform:none;box-shadow:none;background:var(--flat-fx-accent);color:var(--flat-fx-on-accent)}
+html[data-uistyle="flat"] .fx__add:active{transform:none}
+html[data-uistyle="flat"] .fx__add:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
+
+/* panah buka / tutup di tepi panel */
+html[data-uistyle="flat"] .fx__toggle{border-radius:0;background:var(--flat-fx-card);border:1px solid var(--flat-fx-line);border-right:0;color:var(--flat-fx-text);box-shadow:none}
+html[data-uistyle="flat"] .fx__toggle:hover{background:var(--flat-fx-card-hover);color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fx__toggle:active{background:var(--flat-fx-accent);color:var(--flat-fx-on-accent)}
+html[data-uistyle="flat"] .fx__toggle:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:-2px}
+@media (max-width:640px){html[data-uistyle="flat"] .fx--open .fx__panel{box-shadow:-8px 0 20px var(--flat-fx-shadow)}}
+
+/* ---------- 11. Card efek & plugin (pola sama dengan card track: kotak, tanpa outline gradien / kilau / bevel) ---------- */
+html[data-uistyle="flat"] .fxc{border-radius:0;background:var(--flat-fx-card);background-image:none;color:var(--flat-fx-text);box-shadow:none;border:1px solid var(--flat-fx-line);transform:none;transition:background-color .15s ease}
+html[data-uistyle="flat"] .fxc::before,
+html[data-uistyle="flat"] .fxc::after{display:none}
+html[data-uistyle="flat"] .fxc:hover,
+html[data-uistyle="flat"] .fxc--deriz:hover,
+html[data-uistyle="flat"] .fxc--cute:hover{background-color:var(--flat-fx-card-hover);box-shadow:none}
+/* plugin (synth, MGCHORD, MPCS, DERIZ, CUTE): strip oranye tipis di kiri, supaya beda dari efek tanpa warna baru */
+html[data-uistyle="flat"] .fxc[data-kind="plugin"],
+html[data-uistyle="flat"] .fxc[data-kind="plugin"]:hover{box-shadow:inset 3px 0 0 var(--flat-fx-accent)}
+html[data-uistyle="flat"] .fxc.is-tilting{transition:background-color .15s ease}
+html[data-uistyle="flat"] .fxc__title{color:var(--flat-fx-text);font-weight:600}
+html[data-uistyle="flat"] .fxc__title:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px;border-radius:0}
+html[data-uistyle="flat"] .fxc__label{color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fxc-ph{border-radius:0;border:1px dashed var(--flat-fx-line);color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fxc-ph__btn{border-radius:0;background:var(--flat-fx-inset);color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fxc-ph__btn:hover{background:var(--flat-fx-inset-hover)}
+
+/* judul plugin: huruf timbul / gradien dimatikan, jadi teks solid */
+html[data-uistyle="flat"] .fxc--deriz .fxc__title,
+html[data-uistyle="flat"] .fxc--cute .fxc__title,
+html[data-uistyle="flat"] .fxc--mpcs .fxc__title,
+html[data-uistyle="flat"] .fxc--mgchord .fxc__title{color:var(--flat-fx-text);-webkit-text-fill-color:currentColor;background-image:none;text-shadow:none;filter:none}
+html[data-uistyle="flat"] .fxc--deriz.is-off .fxc__title{background-image:none;filter:none}
+
+/* switch on/off: kotak datar (nyala = oranye, mati = abu terang; bulatan dalam jadi kotak) */
+html[data-uistyle="flat"] .fxc__pwr,
+html[data-uistyle="flat"] .fxc--rv .fxc__pwr{border-radius:0;background:var(--flat-fx-accent);box-shadow:none}
+html[data-uistyle="flat"] .fxc__pwr::after{border-radius:0;background:var(--flat-fx-card);box-shadow:none}
+html[data-uistyle="flat"] .fxc.is-off .fxc__pwr{background:var(--flat-fx-off)}
+html[data-uistyle="flat"] .fxc--deriz .fxc__pwr,
+html[data-uistyle="flat"] .fxc--deriz.is-off .fxc__pwr{width:12px;height:22px;margin:0 2px;border-radius:0;box-shadow:none;background:var(--flat-fx-accent)}
+html[data-uistyle="flat"] .fxc--deriz.is-off .fxc__pwr{background:var(--flat-fx-off)}
+html[data-uistyle="flat"] .fxc--deriz .fxc__pwr::after{display:block}
+/* lampu status plugin (MPCS / MGCHORD / CUTE) */
+html[data-uistyle="flat"] .fxc__led,
+html[data-uistyle="flat"] .fxc--cute .fxc__led{width:10px;height:10px;border-radius:0;background:var(--flat-fx-accent);box-shadow:none}
+html[data-uistyle="flat"] .fxc.is-off .fxc__led{background:var(--flat-fx-off)}
+
+/* tombol kecil di baris judul: titik tiga, buka, pop, pattern */
+html[data-uistyle="flat"] .fxc__more,
+html[data-uistyle="flat"] .fxc__open,
+html[data-uistyle="flat"] .fxc__pop,
+html[data-uistyle="flat"] .fxc__pat,
+html[data-uistyle="flat"] .fxc--cute .fxc__open,
+html[data-uistyle="flat"] .fxc--cute .fxc__more{border-radius:0;background:transparent;box-shadow:none;color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fxc__more:hover,
+html[data-uistyle="flat"] .fxc__more[aria-expanded="true"],
+html[data-uistyle="flat"] .fxc__open:hover,
+html[data-uistyle="flat"] .fxc__pop:hover,
+html[data-uistyle="flat"] .fxc__pat:hover,
+html[data-uistyle="flat"] .fxc__pat[aria-expanded="true"],
+html[data-uistyle="flat"] .fxc--cute .fxc__open:hover,
+html[data-uistyle="flat"] .fxc--cute .fxc__more:hover,
+html[data-uistyle="flat"] .fxc--cute .fxc__more[aria-expanded="true"]{background:var(--flat-fx-inset);color:var(--flat-fx-text);box-shadow:none}
+html[data-uistyle="flat"] .fxc :is(.fxc__pwr,.fxc__more,.fxc__open,.fxc__pop,.fxc__pat):focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
+
+/* tab kategori plugin (OSC / FILTER / ENV) */
+html[data-uistyle="flat"] .fxc__tab{color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fxc__tab:hover,
+html[data-uistyle="flat"] .fxc__tab[aria-selected="true"]{color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fxc__tab[aria-selected="true"]{border-bottom-color:var(--flat-fx-accent)}
+html[data-uistyle="flat"] .fxc__tab:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:1px}
+
+/* ---------- 12. Knob & slider vertikal di card (bentuk knob tetap bulat; warna dari token) ---------- */
+html[data-uistyle="flat"] .fxc .fxk .knob-inner{border-radius:50%;background:none;box-shadow:none}
+html[data-uistyle="flat"] .fxc .fxk .circle-bg{stroke:var(--flat-fx-off)}
+html[data-uistyle="flat"] .fxc .fxk .circle{stroke:var(--flat-fx-accent);filter:none}
+html[data-uistyle="flat"] .fxc.is-off .fxk .circle{stroke:var(--flat-fx-muted);filter:none}
+html[data-uistyle="flat"] .fxc .fxk .circle-inner{fill:var(--flat-fx-knob)}
+html[data-uistyle="flat"] .fxc .fxk .circle-inner-stroke{stroke:none}
+html[data-uistyle="flat"] .fxc .fxk .knob-pos{stroke:var(--flat-fx-text);filter:none}
+html[data-uistyle="flat"] .fxc .knob-input:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:3px}
+
+html[data-uistyle="flat"] .vsl::before{border-radius:0;background:var(--flat-fx-off)}
+html[data-uistyle="flat"] .vsl__fill{border-radius:0;background:var(--flat-fx-accent)}
+html[data-uistyle="flat"] .vsl__thumb{border-radius:0;background:var(--flat-fx-strong)}
+html[data-uistyle="flat"] .vsl.is-dragging .vsl__thumb{background:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .vsl:focus-visible .vsl__thumb{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
+
+/* ---------- 13. DERIZ: layar tetap gelap (kanvas digambar JS), tombol & pegangan jadi kotak datar ---------- */
+html[data-uistyle="flat"] .fxc--deriz .deriz__stage{border-radius:0;background:var(--flat-fx-screen);box-shadow:none}
+html[data-uistyle="flat"] .fxc--deriz .deriz__stage.is-over{box-shadow:inset 0 0 0 2px var(--flat-fx-accent)}
+html[data-uistyle="flat"] .fxc--deriz .deriz__up{border-radius:0;background:var(--flat-fx-card);color:var(--flat-fx-text);border:0;box-shadow:none}
+html[data-uistyle="flat"] .fxc--deriz .deriz__up:hover{background:var(--flat-fx-accent);color:var(--flat-fx-on-accent)}
+html[data-uistyle="flat"] .fxc--deriz .deriz__up:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
+html[data-uistyle="flat"] .fxc--deriz .deriz__swap:not([hidden]){border-radius:0;background:var(--flat-fx-inset);color:var(--flat-fx-text);box-shadow:none}
+html[data-uistyle="flat"] .fxc--deriz .deriz__swap:hover{background:var(--flat-fx-inset-hover);color:var(--flat-fx-text);box-shadow:none}
+html[data-uistyle="flat"] .fxc--deriz .deriz__swap:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
+html[data-uistyle="flat"] .deriz__nav{box-shadow:none;border-radius:0}
+html[data-uistyle="flat"] .deriz__thumb{border-radius:0;background:var(--flat-fx-strong);box-shadow:none}
+html[data-uistyle="flat"] .deriz__nav:hover .deriz__thumb,
+html[data-uistyle="flat"] .deriz__nav.is-dragging .deriz__thumb{background:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .deriz__thumb::after{background:var(--flat-fx-accent);box-shadow:none}
+html[data-uistyle="flat"] .fxc--deriz .deriz__swap{color:var(--flat-fx-text)}
+
+/* ---------- 14. Equalizer: grafik (kanvas lewat token --flat-fx-eq-*), bar band, nilai ---------- */
+html[data-uistyle="flat"] .eq__graph{border-radius:0;background:var(--flat-fx-eq-bg);box-shadow:none;border:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .eq__bar{background:var(--flat-fx-inset);border-top:1px solid var(--flat-fx-line);backdrop-filter:none;-webkit-backdrop-filter:none}
+html[data-uistyle="flat"] .eq__bands{border-radius:0;background:var(--flat-fx-card);border:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .eq__band{border-radius:0;color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .eq__band:hover{color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .eq__band[aria-selected="true"]{background:var(--flat-fx-inset);color:var(--flat-fx-text);box-shadow:inset 0 -2px 0 var(--flat-fx-accent)}
+html[data-uistyle="flat"] .eq__band:active{transform:none}
+html[data-uistyle="flat"] .eq__band:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:-2px}
+html[data-uistyle="flat"] .eq__band i{border-radius:0;box-shadow:none}
+/* warna titik band diambil dari token palet (inline --c bawaan dikalahkan lewat !important) */
+html[data-uistyle="flat"] .eq__band:nth-child(1){--c:var(--flat-fx-eq-band-1)!important}
+html[data-uistyle="flat"] .eq__band:nth-child(2){--c:var(--flat-fx-eq-band-2)!important}
+html[data-uistyle="flat"] .eq__band:nth-child(3){--c:var(--flat-fx-eq-band-3)!important}
+html[data-uistyle="flat"] .eq__band:nth-child(4){--c:var(--flat-fx-eq-band-4)!important}
+html[data-uistyle="flat"] .eq__band:nth-child(5){--c:var(--flat-fx-eq-band-5)!important}
+html[data-uistyle="flat"] .eq__bar .fxc__label{color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .eq__val{border-radius:0;background:var(--flat-fx-card);color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .eq__bar .fxk .circle{stroke:var(--flat-fx-accent)}
+html[data-uistyle="flat"] .eq__bar .fxk .circle-bg{stroke:var(--flat-fx-off)}
+html[data-uistyle="flat"] .eq__bar .fxk .circle-inner{fill:var(--flat-fx-knob)}
+html[data-uistyle="flat"] .eq__bar .fxk .circle-inner-stroke{stroke:none}
+html[data-uistyle="flat"] .eq__bar .fxk .knob-pos{stroke:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fxc--eq.is-off .eq__cv{filter:none;opacity:.6}
+
+/* ---------- 15. Reverb: unit tape jadi dua blok datar (atas = layar gelap, bawah = card) ---------- */
+html[data-uistyle="flat"] .rv__unit{border-radius:0;background:var(--flat-fx-card);box-shadow:none;border:1px solid var(--flat-fx-line)}
+html[data-uistyle="flat"] .rv__top{background:var(--flat-fx-screen)}
+html[data-uistyle="flat"] .rv__reel circle,
+html[data-uistyle="flat"] .rv__reel line{stroke:var(--flat-fx-on-screen)}
+html[data-uistyle="flat"] .rv__tape{stroke:var(--flat-fx-on-screen);stroke-opacity:.5}
+html[data-uistyle="flat"] .rv__dec{fill:var(--flat-fx-on-screen);fill-opacity:.12;stroke:var(--flat-fx-on-screen)}
+html[data-uistyle="flat"] .rv__main{background:var(--flat-fx-card)}
+html[data-uistyle="flat"] .rv__wm{color:var(--flat-fx-line)}
+html[data-uistyle="flat"] .rv__main .fxc__label{color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .rv__val{color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fxc--rv .fxk .circle{stroke:var(--flat-fx-accent)}
+html[data-uistyle="flat"] .fxc--rv .fxk .circle-bg{stroke:var(--flat-fx-off)}
+html[data-uistyle="flat"] .fxc--rv .fxk .circle-inner{fill:var(--flat-fx-knob)}
+html[data-uistyle="flat"] .fxc--rv .fxk .circle-inner-stroke{stroke:none}
+html[data-uistyle="flat"] .fxc--rv .fxk .knob-pos{stroke:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fxc--rv .knob-input:focus-visible{outline:2px solid var(--flat-fx-focus)}
+
+/* ---------- 16. Delay: kartu ringkasan di panel (panel penuh di jendela tengah layar belum diubah) ---------- */
+html[data-uistyle="flat"] .fxc--delay .dly__sum{border-radius:0;background:var(--flat-fx-inset);border:1px solid var(--flat-fx-line);color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fxc--delay .dly__sum span{color:var(--flat-fx-muted)}
+html[data-uistyle="flat"] .fxc--delay .dly__sum:hover{background:var(--flat-fx-inset-hover);border-color:var(--flat-fx-line)}
+html[data-uistyle="flat"] .fxc--delay .dly__sum:focus-visible{outline:2px solid var(--flat-fx-focus);outline-offset:2px}
+
+/* ---------- 17. Menu: picker tambah efek, menu titik tiga card, daftar pattern ---------- */
+html[data-uistyle="flat"] .fx-pick,
+html[data-uistyle="flat"] .fx-pats,
+html[data-uistyle="flat"] .track-menu.fx-menu{border-radius:0;background:var(--flat-fx-card);background-image:none;border:1px solid var(--flat-fx-line);color:var(--flat-fx-text);box-shadow:0 4px 12px var(--flat-fx-shadow)}
+html[data-uistyle="flat"] .fx-pick__item{border-radius:0;color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fx-pick__item:hover:not(:disabled),
+html[data-uistyle="flat"] .fx-pick__item:focus-visible{background:var(--flat-fx-inset);transform:none}
+html[data-uistyle="flat"] .fx-pick__item:active:not(:disabled){transform:none}
+html[data-uistyle="flat"] .fx-menu .track-menu__item{border-radius:0;color:var(--flat-fx-text)}
+html[data-uistyle="flat"] .fx-menu .track-menu__item:hover,
+html[data-uistyle="flat"] .fx-menu .track-menu__item:focus-visible{background:var(--flat-fx-inset);transform:none}
+html[data-uistyle="flat"] .fx-menu .track-menu__item--danger{color:var(--flat-fx-danger)}
+html[data-uistyle="flat"] .fx-pats__item{border-radius:0;border:0;background:transparent;color:var(--flat-fx-text);text-shadow:none;box-shadow:none;letter-spacing:0}
+html[data-uistyle="flat"] .fx-pats__item:hover,
+html[data-uistyle="flat"] .fx-pats__item:focus-visible,
+html[data-uistyle="flat"] .fx-pats__item:active{background:var(--flat-fx-inset);box-shadow:none;transform:none;outline:0}
+html[data-uistyle="flat"] .fx-pats__dot{border-radius:0;background:var(--c);box-shadow:none}
+html[data-uistyle="flat"] .fx-pats__empty{color:var(--flat-fx-muted)}
