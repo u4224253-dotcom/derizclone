@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Melvox</title>
+<meta name="theme-color" content="#0f0d13">
+<meta name="description" content="DAW di browser: track, piano roll, efek, dan export MP3 / WAV.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Melvox">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="/src/styles.css">
+<link rel="stylesheet" href="/src/flat-ui.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="play-icon" viewBox="0 0 24 24"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l11-6.86a1 1 0 0 0 0-1.7l-11-6.86A1 1 0 0 0 8 5.14z"/></symbol>
+  <symbol id="pause-icon" viewBox="0 0 24 24"><path d="M7 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM14 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="rewind-icon" viewBox="0 0 24 24"><path d="M11.5 6.2v11.6a.7.7 0 0 1-1.1.57L1.9 12.6a.7.7 0 0 1 0-1.16l8.5-5.8a.7.7 0 0 1 1.1.56z"/><path transform="translate(9.5 0)" d="M11.5 6.2v11.6a.7.7 0 0 1-1.1.57L1.9 12.6a.7.7 0 0 1 0-1.16l8.5-5.8a.7.7 0 0 1 1.1.56z"/></symbol>
+  <symbol id="forward-icon" viewBox="0 0 24 24"><g transform="translate(24 0) scale(-1 1)"><path d="M11.5 6.2v11.6a.7.7 0 0 1-1.1.57L1.9 12.6a.7.7 0 0 1 0-1.16l8.5-5.8a.7.7 0 0 1 1.1.56z"/><path transform="translate(9.5 0)" d="M11.5 6.2v11.6a.7.7 0 0 1-1.1.57L1.9 12.6a.7.7 0 0 1 0-1.16l8.5-5.8a.7.7 0 0 1 1.1.56z"/></g></symbol>
+</svg>
+
+<div class="stage">
+<div class="workspace">
+  <!-- Daftar track -->
+  <div class="tracklist alt-on">
+    <button class="panel-toggle" id="panelToggle" type="button" aria-expanded="true" aria-label="Tutup panel track" title="Tutup panel track"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <!-- Auto Scroll: timeline ikut menggeser saat playhead keluar layar. Icon: Lucide "locate-fixed" (ISC, bebas dipakai komersial) -->
+    <button class="panel-toggle autoscroll-toggle" id="autoScrollToggle" type="button" role="switch" aria-checked="true" aria-label="Auto scroll playlist" title="Auto scroll playlist: nyala"><svg class="ico-ln" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><line x1="2" x2="5" y1="12" y2="12"/><line x1="19" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="5"/><line x1="12" x2="12" y1="19" y2="22"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/></svg></button>
+    <section class="headers" aria-label="Daftar Track">
+      <div class="headers-list">
+        <div class="trkcard-wrap" data-track="1">
+          <div class="trkcard trkcard--on trkcard--top">
+            <div class="trkcard__edge"></div>
+            <div class="trkcard-body">
+              <button title="Tampilkan instrumen" class="trkcard__lead bare-btn">
+                <span class="trkcard__inst"><span class="ico"><svg class="ico-ln" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path d="M10 13v4"/><path d="M14 13v4"/><path d="M18 13v4"/><path d="M2 13h20"/><path d="M22 11.5A3.5 3.5 0 0 0 18.5 8a3.52 3.52 0 0 1-3.173-2A7 7 0 0 0 2 9v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/><path d="M6 13v4"/></svg></span></span>
+              </button>
+              <div class="trkcard__rows">
+                <div class="trkcard__head">
+                  <div class="trkcard__title">
+                    <button title="Grand Piano" class="trkcard__title-btn flat-btn"><span id="track-name-1">Grand Piano</span></button>
+                  </div>
+                  <button type="button" role="switch" aria-checked="true" aria-label="Track nyala / mati" title="Track nyala / mati" class="trkcard__power"></button>
+                  <button title="Opsi track…" aria-haspopup="menu" aria-expanded="false" class="ico-btn trkcard__menu"><span class="ico" style="width:16px;height:16px"><svg class="ico-ln" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></span></button>
+                </div>
+                <div class="trkcard__ctrl">
+                  <div class="trkcard__ctrl-in">
+                    <div class="trkcard__pan"><div class="knob mini"><div class="knob-inner"><div role="slider" aria-label="Pan" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.5" aria-valuetext="Pan 0" tabindex="0" class="knob-input"><div class="knobwheel"><svg viewBox="0 0 36 36" aria-hidden="true" class="circular-chart"><path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="75, 100" class="circle-bg" style="transform-origin:18px 18px;transform:rotate(225deg)"></path><path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dashoffset="100" stroke-dasharray="100" class="circle accent-on" style="transform:rotate(225deg)"></path><path d="M18 5.142857142857142 a 12.857142857142858 12.857142857142858 0 0 1 0 25.714285714285715 a 12.857142857142858 12.857142857142858 0 0 1 0 -25.714285714285715" fill="var(--background-tinted-press)" stroke="none" class="circle-inner"></path><path d="M18 5.7857142857142865 a 12.214285714285714 12.214285714285714 0 0 1 0 24.428571428571427 a 12.214285714285714 12.214285714285714 0 0 1 0 -24.428571428571427" stroke="var(--background-tinted-base)" fill="none" class="circle-inner-stroke"></path><path d="M 18 7 L 18 14.5" class="knob-pos" style="transform:rotate(0deg)"></path></svg></div></div></div></div></div>
+                    <div class="trkcard__vol"><div class="rng-box"><div class="rng-in"><input type="range" min="0" max="150" value="100" aria-label="Volume, Grand Piano" aria-valuenow="100" aria-valuetext="Vol 100%" aria-valuemin="0" aria-valuemax="150" step="1" style="--slider-progress: 66.6667%; --slider-progress-fraction: 0.6667" aria-disabled="false" class="slider audio-fader-theme rng--thin rng--hit has-prog"></div></div></div>
+                    <button role="switch" aria-checked="false" aria-label="Mode rekam" class="trkcard__arm bare-btn">S</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="trackmeter" aria-hidden="true"><i class="trackmeter__bar"><b></b><s></s></i><i class="trackmeter__bar"><b></b><s></s></i></div>
+            <div role="separator" class="trkcard-sep"></div>
+          </div>
+        </div>
+      </div>
+      <button class="addtrack"><span class="ico" style="width:14px;height:14px"><svg class="ico-ln" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span>Tambahkan track</span></button>
+    </section>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline" id="timeline">
+    <div class="tl-headwrap">
+      <div class="rl rl--main" id="ruler">
+        <div class="rl-box"><canvas class="axiscanvas" id="axis" aria-label="Timeline ruler"></canvas></div>
+      </div>
+    </div>
+    <div class="lanes" id="lanes">
+      <div class="lane" data-track="1"></div>
+      <div class="playhead" id="playhead">
+        <div class="playhead-head"><svg width="9" height="20" viewBox="0 0 9 20"><path d="M2 11A2.5 2.5 0 0 1 7 11V15.5L4.5 19.5L2 15.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/></svg></div>
+        <div class="playhead-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Panel efek: menempel di sisi kanan layar, dibuka / ditutup lewat tab panah di tepi kiri panel (menempel di tepi kanan layar saat tertutup, tinggi layar bagian tengah) -->
+<aside class="fx" id="fxPanel" aria-label="Panel efek">
+  <button class="fx__toggle" id="fxToggle" type="button" aria-expanded="true" aria-controls="fxBody" aria-label="Tutup panel efek" title="Tutup panel efek"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5.2C8 4.6 6.8 5.3 6.8 6.5V17.5C6.8 18.7 8 19.4 9 18.8L17 13.2C18 12.5 18 11.5 17 10.8Z"/></svg></button>
+  <div class="fx__clip">
+    <div class="fx__panel" id="fxBody">
+      <header class="fx__head fx__item" style="--i:0"><h2 class="fx__title">Effects</h2></header>
+      <div class="fx__pages fx__item" style="--i:1" id="fxPages" data-page="plugin" role="tablist" aria-label="Halaman panel efek">
+        <button type="button" role="tab" class="fx__page" id="fxPagePlugin" data-page="plugin" aria-selected="true" aria-controls="fxList">Plugin</button>
+        <button type="button" role="tab" class="fx__page" id="fxPageEffect" data-page="effect" aria-selected="false" aria-controls="fxList" tabindex="-1">Effect</button>
+      </div>
+      <div class="fx__body">
+        <div class="fx__top fx__item" style="--i:2">
+          <button type="button" class="fx__add" id="fxAdd" aria-haspopup="menu" aria-expanded="false" aria-label="Tambah efek" title="Tambah efek"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+        <div class="fx__list" id="fxList"></div>
+      </div>
+    </div>
+  </div>
+</aside>
+</div>
+
+<footer class="transportbar" id="dockBar">
+<div class="dock-clip" id="dockClip">
+<div class="tp-dock" id="dockCard"><div role="group" aria-label="Kontrol transport" class="tp"><div class="tp__side tp__side--l"><button type="button" class="hist-btn pitch-btn" id="btnPitch" aria-label="Pitch project" title="Pitch project"></button><button type="button" class="hist-btn more-btn" id="btnMore" aria-haspopup="menu" aria-expanded="false" aria-label="Opsi transport" title="Opsi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg></button><button type="button" class="hist-btn metro-btn" id="btnMetro" aria-label="Metronome dan BPM" title="Metronome &amp; BPM">M</button></div><div class="tp__mid"><button data-testid="Mundur [Arrow left]" aria-label="Mundur" title="Mundur (←)" class="rewind tp__btn bs-md txt-lg bare-btn"><span class="ico ico--svg ic-rewind"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#rewind-icon"></use></svg></span></button><button data-testid="Putar/jeda [Space]" aria-label="Putar" title="Putar/jeda (Space)" class="play tp__btn bs-md txt-lg inv-on bare-btn"><span class="ico ico--svg ic-play"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#play-icon"></use></svg></span></button><button data-testid="Maju cepat [Arrow right]" aria-label="Maju cepat" title="Maju cepat (→)" class="forward tp__btn bs-md txt-lg bare-btn"><span class="ico ico--svg ic-forward"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#forward-icon"></use></svg></span></button></div><div class="tp__side tp__side--r"><button type="button" class="hist-btn hist-ico" id="btnUndo" aria-label="Urungkan (Ctrl+Z)" title="Undo (Ctrl+Z)" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button><button type="button" class="hist-btn hist-ico" id="btnRedo" aria-label="Ulangi (Ctrl+Shift+Z)" title="Redo (Ctrl+Shift+Z)" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button></div></div></div>
+</div>
+<button class="kbd-toggle tp__btn bare-btn" id="kbdToggle" type="button" aria-controls="dockClip" aria-expanded="true" aria-label="Tutup panel bawah" title="Tutup panel bawah"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+</footer>
+
+<!-- Keyboard virtual: tingginya diatur dengan menyeret card transport ke atas / bawah; panah di kanan card menutup seluruh panel bawah -->
+<section class="kbd" id="kbd" aria-label="Keyboard virtual" aria-hidden="true" inert>
+  <div class="kbd__inner">
+    <div class="kbd__bar">
+      <span class="kbd__title" id="kbdTitle"></span>
+      <div class="kbd__oct" role="group" aria-label="Oktaf">
+        <button class="kbd__btn" id="kbdOctDown" type="button" aria-label="Oktaf turun"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <span class="kbd__octlabel" id="kbdOctLabel">C3</span>
+        <button class="kbd__btn" id="kbdOctUp" type="button" aria-label="Oktaf naik"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+    <div class="ivk" id="kbdKeys"><div class="ivk__scroll"><div class="ivk__keys"></div></div></div>
+  </div>
+</section>
+
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

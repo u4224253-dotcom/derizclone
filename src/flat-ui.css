@@ -1,0 +1,213 @@
+/* ===== Gaya UI "Flat" (atribut data-uistyle="flat" di <html>; bawaan = "soft"/tanpa atribut) =====
+   File ini dimuat SETELAH styles.css. Aturan pemisah supaya tidak bertabrakan dengan tema default:
+   1. Semua warna Flat memakai token berawalan --flat-* (didefinisikan di bawah, hanya aktif saat data-uistyle="flat").
+   2. Di file ini TIDAK ADA yang menimpa token default (--bg, --panel, --card, --line, --text, --muted, --accent, dst).
+      Token default hanya boleh dipakai sebagai cadangan (fallback) untuk --track-color.
+   3. Semua selector diawali html[data-uistyle="flat"], jadi mode Default tidak tersentuh sama sekali.
+   4. Grup token dipisah per area: --flat-*    = channel mixer (tahap 1)
+                                    --flat-pl-* = playlist & grid (tahap 2). Nilainya boleh sama dengan token mixer, tapi tidak saling merujuk,
+                                                  jadi mengubah warna playlist tidak menggeser mixer (dan sebaliknya).
+   TAHAP 1: channel mixer (kolom card track di kiri timeline + menu titik tiga track).
+   TAHAP 2: playlist (latar area kerja, ruler, baris track) + grid (garis bar / ketukan / 1/16 ...). Clip / pattern belum diubah. */
+
+/* ---------- 0. Palet dasar Flat (dari src/palettes.ts: "Studio Netral" + Klasik/Redam untuk status) ----------
+   Hanya nilai mentah. Token --flat-* / --flat-pl-* di bawah merujuk ke sini; untuk ganti warna Flat cukup ubah baris ini atau pemetaan tokennya. */
+html[data-uistyle="flat"]{
+  --flat-pal-ink:#1C1D1F;      /* Studio: Hitam */
+  --flat-pal-grip:#55585D;     /* Studio: Grip */
+  --flat-pal-text:#8A8D92;     /* Studio: Teks */
+  --flat-pal-light:#C2C4C7;    /* Studio: Terang */
+  --flat-pal-paper:#E4E5E3;    /* Studio: Kertas */
+  --flat-pal-orange:#FF9F1A;   /* Studio: Oranye */
+  --flat-pal-rec:#FF3D71;      /* Studio: Rec */
+  --flat-pal-ok:#2F9E44;       /* Redam: Rimba */
+  --flat-pal-solo:#FFA529;     /* Klasik: Jingga */
+}
+
+/* ---------- 1. Token warna Flat (terang) ---------- */
+html[data-uistyle="flat"]{
+  /* permukaan */
+  --flat-surface:color-mix(in srgb,var(--flat-pal-paper) 55%,var(--flat-pal-light));        /* dasar kolom mixer */
+  --flat-head:var(--flat-pal-paper);           /* strip atas (sejajar ruler) */
+  --flat-card:var(--flat-pal-paper);           /* card track */
+  --flat-card-hover:color-mix(in srgb,var(--flat-pal-paper) 78%,var(--flat-pal-light));     /* card track tidak terpilih saat disentuh */
+  --flat-line:var(--flat-pal-light);           /* garis pemisah 1px */
+  /* teks */
+  --flat-text:var(--flat-pal-ink);
+  --flat-muted:var(--flat-pal-grip);
+  --flat-on-accent:var(--flat-pal-ink);  /* glyph di atas aksen oranye (tombol nyala) */
+  --flat-on-color:var(--flat-pal-ink);       /* glyph di atas warna track yang terang */
+  /* kontrol (tombol, slider, knob) */
+  --flat-ctrl:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));
+  --flat-ctrl-hover:color-mix(in srgb,var(--flat-pal-paper) 30%,var(--flat-pal-light));
+  --flat-ctrl-strong:var(--flat-pal-text);
+  --flat-ctrl-on:var(--flat-pal-orange);        /* tombol nyala (auto scroll) */
+  --flat-track:var(--flat-pal-light);          /* rel slider */
+  --flat-focus:var(--flat-pal-orange);
+  /* status */
+  --flat-accent:var(--flat-pal-orange);         /* cadangan jika track belum punya warna */
+  --flat-solo:var(--flat-pal-solo);
+  --flat-ok:var(--flat-pal-ok);
+  --flat-off:var(--flat-pal-light);
+  --flat-danger:var(--flat-pal-rec);
+  /* meter level */
+  --flat-meter-bg:color-mix(in srgb,var(--flat-pal-paper) 60%,var(--flat-pal-light));
+  --flat-meter-empty:rgba(28,29,31,.12);
+  --flat-meter-ok:var(--flat-pal-ok);
+  --flat-meter-warn:var(--flat-pal-orange);
+  --flat-meter-clip:var(--flat-pal-rec);
+  /* bayangan (hanya untuk menu & drag) */
+  --flat-shadow:rgba(28,29,31,.18);
+}
+
+/* ---------- 2. Kolom channel mixer ---------- */
+html[data-uistyle="flat"] .tracklist{
+  color:var(--flat-text);
+  background:
+    linear-gradient(var(--flat-line),var(--flat-line)) 0 47px/100% 1px no-repeat,
+    linear-gradient(var(--flat-head),var(--flat-head)) 0 0/100% 48px no-repeat,
+    var(--flat-surface);
+  border-right:1px solid var(--flat-line)}
+html[data-uistyle="flat"] .tracklist .trkcard-wrap{padding:0;border-bottom:1px solid var(--flat-line)}
+
+/* tombol panah tutup panel & auto scroll di strip atas */
+html[data-uistyle="flat"] .tracklist .panel-toggle{border-radius:0;background:var(--flat-ctrl);color:var(--flat-text);transition:background-color .15s ease,color .15s ease}
+html[data-uistyle="flat"] .tracklist .panel-toggle:hover{background:var(--flat-ctrl-hover);transform:none}
+html[data-uistyle="flat"] .tracklist .panel-toggle:active{transform:none}
+html[data-uistyle="flat"] .tracklist .autoscroll-toggle{color:var(--flat-muted)}
+html[data-uistyle="flat"] .tracklist .autoscroll-toggle[aria-checked="true"]{color:var(--flat-on-accent);background:var(--flat-ctrl-on)}
+
+/* ---------- 3. Card track ---------- */
+html[data-uistyle="flat"] .tracklist .trkcard,
+html[data-uistyle="flat"] .tracklist .trkcard--on{border-radius:0;box-shadow:none;background-color:var(--flat-card);color:var(--flat-text);transition:background-color .15s ease}
+html[data-uistyle="flat"] .tracklist .trkcard::before,
+html[data-uistyle="flat"] .tracklist .trkcard::after{display:none}   /* outline gradien + kilau "glass" dimatikan */
+html[data-uistyle="flat"] .tracklist .trkcard:not(.trkcard--on):hover{background-color:var(--flat-card-hover)}
+/* track terpilih: latar = warna track yang sangat muda + strip warna tipis di kiri */
+html[data-uistyle="flat"] .tracklist .trkcard--on,
+html[data-uistyle="flat"] .tracklist .trkcard--on:hover{
+  background-color:color-mix(in srgb,var(--track-color,var(--flat-accent)) 16%,var(--flat-card));
+  box-shadow:inset 3px 0 0 var(--track-color,var(--flat-accent));transform:none}
+html[data-uistyle="flat"] .tracklist .trkcard.is-jelly{transform:none;box-shadow:inset 3px 0 0 var(--track-color,var(--flat-accent)),0 6px 14px var(--flat-shadow)}
+html[data-uistyle="flat"] .tracklist .trkcard-wrap.is-reordering .trkcard{transform:none;box-shadow:0 0 0 2px var(--track-color,var(--flat-accent)),0 6px 14px var(--flat-shadow)}
+
+html[data-uistyle="flat"] .tracklist .trkcard__title-btn{color:var(--flat-text)}
+
+/* icon instrumen: kotak warna track */
+html[data-uistyle="flat"] .tracklist .trkcard__inst{border-radius:0;background:var(--track-color,var(--flat-accent));color:var(--flat-on-color)}
+html[data-uistyle="flat"] .tracklist .trkcard__lead:hover .trkcard__inst,
+html[data-uistyle="flat"] .tracklist .trkcard__lead:active .trkcard__inst{transform:none}
+html[data-uistyle="flat"] .tracklist .trkcard__lead.is-reorder-ready .trkcard__inst{transform:none;box-shadow:0 0 0 2px var(--flat-card),0 0 0 4px var(--track-color,var(--flat-accent))}
+
+/* lampu on/off: kotak datar */
+html[data-uistyle="flat"] .tracklist .trkcard__power{width:10px;height:10px;border-radius:0;background:var(--flat-ok);box-shadow:none}
+html[data-uistyle="flat"] .tracklist .trkcard__power[aria-checked="false"]{background:var(--flat-off);box-shadow:none}
+
+/* titik tiga */
+html[data-uistyle="flat"] .tracklist .ico-btn{border-radius:0;color:var(--flat-muted)}
+html[data-uistyle="flat"] .tracklist .ico-btn:hover{background:var(--flat-ctrl);color:var(--flat-text)}
+html[data-uistyle="flat"] .tracklist .ico-btn[aria-expanded="true"]{background:var(--flat-ctrl-hover);color:var(--flat-text)}
+
+/* tombol S (solo) */
+html[data-uistyle="flat"] .tracklist .trkcard__arm{border-radius:0;border:0;background:var(--flat-ctrl);color:var(--flat-text)}
+html[data-uistyle="flat"] .tracklist .trkcard__arm:hover{background:var(--flat-ctrl-hover)}
+html[data-uistyle="flat"] .tracklist .trkcard__arm[aria-checked="true"]{background:var(--flat-solo);color:var(--flat-text)}
+html[data-uistyle="flat"] .tracklist .trkcard__arm i{border-radius:0}
+html[data-uistyle="flat"] .tracklist .sm,
+html[data-uistyle="flat"] .tracklist .sm__btn{border-radius:0;color:var(--flat-text)}
+
+/* knob pan: tetap bulat (itu bentuk knob), warnanya terang */
+html[data-uistyle="flat"] .tracklist .trkcard__pan .circle-inner{fill:var(--flat-ctrl-strong)}
+html[data-uistyle="flat"] .tracklist .trkcard__pan .knob-pos{stroke:var(--flat-text)}
+
+/* slider volume: rel tipis, isi = warna track, thumb kotak */
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider{background:linear-gradient(var(--flat-muted),var(--flat-muted)) calc(66.667% - 1.2px) 50%/1px 12px no-repeat}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-webkit-slider-runnable-track{height:4px;border-radius:0;
+  background:linear-gradient(var(--track-color,var(--flat-accent)),var(--track-color,var(--flat-accent))) 0 0/calc((100% - 8px) * var(--slider-progress-fraction,.667) + 4px) 4px no-repeat,var(--flat-track)}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-track{height:4px;border-radius:0;background:var(--flat-track)}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-progress{height:4px;border-radius:0;background:var(--track-color,var(--flat-accent))}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-webkit-slider-thumb{margin-top:-8px;border-radius:0;background:var(--flat-text);box-shadow:none}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider::-moz-range-thumb{border-radius:0;background:var(--flat-text)}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider:hover::-webkit-slider-thumb,
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider:active::-webkit-slider-thumb{transform:none;background:var(--flat-text)}
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider:hover::-moz-range-thumb,
+html[data-uistyle="flat"] .tracklist .trkcard__vol .slider:active::-moz-range-thumb{transform:none;background:var(--flat-text)}
+
+/* meter level: warna solid bertingkat, tanpa glow */
+html[data-uistyle="flat"] .tracklist .trackmeter{border-radius:0;background:var(--flat-meter-bg);box-shadow:none}
+html[data-uistyle="flat"] .tracklist .trackmeter::before{background:var(--flat-line)}
+html[data-uistyle="flat"] .tracklist .trackmeter__bar,
+html[data-uistyle="flat"] .tracklist .trackmeter__bar[data-l="2"],
+html[data-uistyle="flat"] .tracklist .trackmeter__bar[data-l="3"]{filter:none}
+html[data-uistyle="flat"] .tracklist .trackmeter__bar::before{background:var(--flat-meter-empty)}
+html[data-uistyle="flat"] .tracklist .trackmeter__bar b,
+html[data-uistyle="flat"] .tracklist .trackmeter__bar s{filter:none;
+  background:linear-gradient(to top,var(--flat-meter-ok) 0 70%,var(--flat-meter-warn) 70% 88%,var(--flat-meter-clip) 88% 100%)}
+
+/* tombol tambah track */
+html[data-uistyle="flat"] .tracklist .addtrack{border-radius:0;margin:0;width:100%;background:var(--flat-card);color:var(--flat-text);border:0;border-bottom:1px solid var(--flat-line)}
+html[data-uistyle="flat"] .tracklist .addtrack:hover{background:var(--flat-ctrl);color:var(--flat-text)}
+
+/* fokus keyboard */
+html[data-uistyle="flat"] .tracklist :is(button,[role="slider"],input):focus-visible{outline:2px solid var(--flat-focus);outline-offset:-2px}
+
+/* ---------- 4. Menu titik tiga track (kelas .mixer-menu dipasang di main.ts; menu piano roll / efek / pattern tidak ikut) ---------- */
+html[data-uistyle="flat"] .track-menu.mixer-menu{border-radius:0;background:var(--flat-card);border:1px solid var(--flat-line);color:var(--flat-text);box-shadow:0 4px 12px var(--flat-shadow)}
+html[data-uistyle="flat"] .mixer-menu .track-menu__item{border-radius:0;color:var(--flat-text)}
+html[data-uistyle="flat"] .mixer-menu .track-menu__item:hover,
+html[data-uistyle="flat"] .mixer-menu .track-menu__item:focus-visible{background:var(--flat-ctrl);transform:none}
+html[data-uistyle="flat"] .mixer-menu .track-menu__item--danger{color:var(--flat-danger)}
+html[data-uistyle="flat"] .mixer-menu .track-menu__item[aria-expanded="true"]{background:var(--flat-ctrl-hover)}
+html[data-uistyle="flat"] .mixer-menu .track-menu__dot,
+html[data-uistyle="flat"] .mixer-menu .track-menu__swatch{border-radius:0}
+html[data-uistyle="flat"] .mixer-menu .track-menu__swatch:hover,
+html[data-uistyle="flat"] .mixer-menu .track-menu__swatch:focus-visible{border-color:var(--flat-text);transform:none}
+
+/* ================================================================================================
+   TAHAP 2: PLAYLIST & GRID
+   ================================================================================================ */
+
+/* ---------- 5. Token warna Playlist & Grid (terang, terpisah dari token mixer) ---------- */
+html[data-uistyle="flat"]{
+  /* permukaan */
+  --flat-pl-bg:color-mix(in srgb,var(--flat-pal-paper) 55%,var(--flat-pal-light));           /* latar area kerja (di bawah baris track terakhir / di luar ujung timeline) */
+  --flat-pl-lane:var(--flat-pal-paper);         /* baris track */
+  --flat-pl-lane-alt:color-mix(in srgb,var(--flat-pal-paper) 80%,var(--flat-pal-light));     /* baris track selang-seling */
+  --flat-pl-ruler:var(--flat-pal-paper);        /* strip ruler (48px, menyambung dengan strip atas mixer) */
+  --flat-pl-line:var(--flat-pal-light);         /* garis pemisah baris & garis bawah ruler */
+  /* grid: bar = garis solid; ketukan, 1/16, dst = warna dasar (R,G,B) x alpha zoom (--beat-a, --sub-a, --mid-a, --fine-a) x gain */
+  --flat-pl-grid-bar:var(--flat-pal-light);     /* garis tiap bar */
+  --flat-pl-grid:28,29,31;        /* warna dasar garis ketukan & lebih halus (format R,G,B) */
+  --flat-pl-grid-gain:3.6;        /* pengali alpha zoom: latar terang butuh garis lebih pekat daripada latar gelap */
+  /* ruler (dibaca juga oleh main.ts untuk canvas) */
+  --flat-pl-tick-a:#55585D;       /* tick bar + angka */
+  --flat-pl-tick-b:#8A8D92;       /* tick ketukan + label ketukan */
+  --flat-pl-tick-c:#C2C4C7;       /* tick 1/16 + label 1/16 */
+  /* penunjuk */
+  --flat-pl-play:var(--flat-pal-rec);         /* playhead */
+  --flat-pl-focus:var(--flat-pal-orange);        /* baris target saat drop / seret */
+  --flat-pl-shadow:rgba(28,29,31,.18);
+}
+
+/* ---------- 6. Latar playlist ---------- */
+html[data-uistyle="flat"] .workspace{background:var(--flat-pl-bg)}
+html[data-uistyle="flat"] .tl-headwrap{background:var(--flat-pl-ruler);border-bottom:1px solid var(--flat-pl-line)}
+
+/* ---------- 7. Baris track + grid (gradien per baris; spesifisitas dinaikkan supaya menang atas tema "mono" & "jembut") ---------- */
+html[data-uistyle="flat"] .lanes .lane{
+  background-color:var(--flat-pl-lane);
+  border-bottom:1px solid var(--flat-pl-line);
+  background-image:
+    linear-gradient(90deg,var(--flat-pl-grid-bar) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(var(--flat-pl-grid),calc(var(--beat-a,.07) * var(--flat-pl-grid-gain))) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(var(--flat-pl-grid),calc(var(--sub-a,0) * var(--flat-pl-grid-gain))) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(var(--flat-pl-grid),calc(var(--mid-a,0) * var(--flat-pl-grid-gain))) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(var(--flat-pl-grid),calc(var(--fine-a,0) * var(--flat-pl-grid-gain))) 1px,transparent 1px)}
+html[data-uistyle="flat"] .lanes .lane.alt{background-color:var(--flat-pl-lane-alt)}
+
+/* baris saat jadi target drop / sedang dipindah: bingkai solid, tanpa glow */
+html[data-uistyle="flat"] .lanes .lane.is-over{box-shadow:inset 0 0 0 2px var(--flat-pl-focus)}
+html[data-uistyle="flat"] .lanes .lane.is-reordering{filter:none;box-shadow:0 0 0 2px var(--track-color,var(--flat-pl-focus)),0 6px 14px var(--flat-pl-shadow)}
+
+/* ---------- 8. Playhead ---------- */
+html[data-uistyle="flat"] .playhead{color:var(--flat-pl-play)}

@@ -1,0 +1,7 @@
+Salamander Grand Piano V3
+Recorded and edited by Alexander Holm.
+Licensed under Creative Commons Attribution 3.0 (CC BY 3.0): https://creativecommons.org/licenses/by/3.0/
+
+Files in this folder (C2 ... C7, one sample every 3 semitones) are the Salamander Grand Piano samples
+as distributed in the Tone.js audio repository (https://github.com/Tonejs/audio, folder "salamander"),
+used unmodified (MP3, 128 kbps). Used by the MGCHORD plugin preview (src/mgchord-audio.ts).
