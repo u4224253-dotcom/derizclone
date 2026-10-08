@@ -890,3 +890,155 @@ html[data-uistyle="flat"] .pattern__handle::before{border-radius:var(--flat-r);b
 html[data-uistyle="flat"] .pattern.is-resizing .pattern__handle::before,
 html[data-uistyle="flat"] .pattern.is-selected .pattern__handle:active::before{box-shadow:none;transform:scale(1.1)}
 html[data-uistyle="flat"] .pattern.is-selected .pattern__handle:hover::before{transform:scale(1.08)}
+
+/* ================================================================================================
+   30. PANEL BAWAH GAYA DAW (referensi: Ableton Live gelap) — layout, card & warna
+   Susunan: [kartu instrumen] [grup alat: Pitch / titik tiga / Metronome] [grup transport: mundur / PLAY / maju] [grup riwayat: undo / redo]
+   Hanya CSS + kartu .tp__inst (diisi src/dock-inst.ts). id & kelas tombol tetap, jadi logika lama tidak berubah.
+   ================================================================================================ */
+html[data-uistyle="flat"]{
+  /* palet panel bawah (nilai mentah dari gambar referensi) */
+  --flat-pal-dock:#2b2a29;        /* latar bar */
+  --flat-pal-dock-line:#444240;   /* garis tepi card / pemisah */
+  --flat-pal-dock-card:#363433;   /* card kartu instrumen */
+  --flat-pal-dock-well:#171616;   /* kolam gelap di belakang grup tombol */
+  --flat-pal-dock-btn:#232221;    /* tombol di dalam kolam */
+  --flat-pal-dock-hi:#34322f;     /* hover */
+  --flat-pal-dock-text:#ece6de;   /* ikon & teks */
+  --flat-pal-dock-muted:#9b948b;  /* ikon nonaktif */
+  --flat-dk-bar:var(--flat-pal-dock);
+  --flat-dk-line:var(--flat-pal-dock-line);
+  --flat-dk-card:var(--flat-pal-dock-card);
+  --flat-dk-well:var(--flat-pal-dock-well);
+  --flat-dk-btn:var(--flat-pal-dock-btn);
+  --flat-dk-hi:var(--flat-pal-dock-hi);
+  --flat-dk-text:var(--flat-pal-dock-text);
+  --flat-dk-muted:var(--flat-pal-dock-muted);
+  --flat-dk-accent:var(--flat-pal-orange);
+  --flat-dk-r:8px;
+}
+
+/* bar: card gelap selebar layar */
+html[data-uistyle="flat"] .transportbar{--tb:34px;--tb-play:44px;--tb-gap:2px;--tb-grp:10px}
+html[data-uistyle="flat"] .transportbar .tp-dock{
+  display:flex;align-items:center;justify-content:flex-start;gap:12px;padding:7px 12px;
+  background-color:var(--flat-dk-bar);color:var(--flat-dk-text);
+  border:0;border-top:1px solid var(--flat-dk-line);border-radius:var(--flat-r-lg) var(--flat-r-lg) 0 0;box-shadow:none}
+
+/* kartu instrumen (kiri) */
+html[data-uistyle="flat"] .transportbar .tp__inst{
+  display:flex;align-items:center;gap:10px;flex:0 1 220px;min-width:0;height:44px;padding:0 10px 0 6px;margin:0;
+  background:var(--flat-dk-card);color:var(--flat-dk-text);border:1px solid var(--flat-dk-line);border-radius:var(--flat-dk-r);
+  font:600 13px/1 var(--font,inherit);text-align:left;cursor:default;pointer-events:none}
+html[data-uistyle="flat"] .tp__inst-ico{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:var(--flat-r);
+  background:var(--inst-color,var(--flat-dk-accent));color:var(--flat-pal-ink)}
+html[data-uistyle="flat"] .tp__inst-ico svg{display:block;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html[data-uistyle="flat"] .tp__inst-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html[data-uistyle="flat"] .tp__inst-chev{flex:none;width:16px;height:16px;fill:none;stroke:var(--flat-dk-muted);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* tiga grup tombol = kolam gelap membulat (seperti grup alat & transport di referensi) */
+html[data-uistyle="flat"] .transportbar .tp{display:flex;flex:1;align-items:center;justify-content:center;gap:var(--tb-grp);min-width:0;width:auto}
+html[data-uistyle="flat"] .transportbar .tp__side,
+html[data-uistyle="flat"] .transportbar .tp__mid{display:flex;align-items:center;gap:var(--tb-gap);padding:3px;min-width:0;
+  background:var(--flat-dk-well);border-radius:var(--flat-dk-r)}
+html[data-uistyle="flat"] .transportbar .tp__side--l,
+html[data-uistyle="flat"] .transportbar .tp__side--r,
+html[data-uistyle="flat"] .transportbar .tp__mid{justify-content:center}
+html[data-uistyle="flat"] .transportbar .tp__side--l{order:1}
+html[data-uistyle="flat"] .transportbar .tp__mid{order:2}
+html[data-uistyle="flat"] .transportbar .tp__side--r{order:3}
+
+/* tombol: segmen kotak membulat tanpa garis; ikon terang */
+html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn){
+  width:var(--tb);height:var(--tb);border:0;border-radius:6px;background:var(--flat-dk-btn);color:var(--flat-dk-text);box-shadow:none}
+html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn):hover:not(:disabled){background:var(--flat-dk-hi);border:0;color:#fff}
+html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn):active:not(:disabled){background:#0e0d0d;transform:none}
+html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn):disabled{background:transparent;color:var(--flat-dk-muted);opacity:.5}
+html[data-uistyle="flat"] .transportbar :is(.hist-btn,.tp__btn):focus-visible{outline:2px solid var(--flat-dk-accent);outline-offset:1px}
+html[data-uistyle="flat"] .transportbar .tp__btn .ico,
+html[data-uistyle="flat"] .transportbar .hist-ico svg,
+html[data-uistyle="flat"] .transportbar .more-btn svg{width:18px;height:18px}
+
+/* PLAY: segmen paling besar & paling gelap di tengah grup; saat main ikon jadi oranye */
+html[data-uistyle="flat"] .transportbar .play{width:calc(var(--tb-play) + 8px);height:var(--tb-play);border:0;border-radius:6px;
+  background:#0c0b0b;color:var(--flat-pal-key)}
+html[data-uistyle="flat"] .transportbar .play:hover:not(:disabled){background:#000;border:0;color:#fff}
+html[data-uistyle="flat"] .transportbar .play[aria-label="Jeda"]{color:var(--flat-dk-accent)}
+html[data-uistyle="flat"] .transportbar .play .ico{width:22px;height:22px}
+
+/* status nyala (Pitch / Metronome): blok oranye seperti item terpilih di browser referensi */
+html[data-uistyle="flat"] .transportbar :is(.pitch-btn,.metro-btn).is-on,
+html[data-uistyle="flat"] .transportbar :is(.pitch-btn,.metro-btn).is-on:hover:not(:disabled){background:var(--flat-dk-accent);border:0;color:var(--flat-pal-ink)}
+html[data-uistyle="flat"] .transportbar :is(.more-btn,.metro-btn,.pitch-btn)[aria-expanded="true"]{background:var(--flat-dk-hi);border:0;color:#fff}
+html[data-uistyle="flat"] .transportbar .metro-btn{font:700 13px/1 var(--font,inherit)}
+
+/* panah buka / tutup panel bawah */
+html[data-uistyle="flat"] .transportbar .kbd-toggle{right:12px;background:var(--flat-dk-btn);border:0;color:var(--flat-dk-text)}
+html[data-uistyle="flat"] .transportbar.is-collapsed .kbd-toggle{background:var(--flat-dk-bar);border:1px solid var(--flat-dk-line);color:var(--flat-dk-text)}
+
+/* layar sempit: kartu instrumen disembunyikan, grup tetap di tengah */
+@media (max-width:720px){
+  html[data-uistyle="flat"] .transportbar .tp__inst{display:none}
+  html[data-uistyle="flat"] .transportbar .tp-dock{padding:6px 44px 6px 8px}
+  html[data-uistyle="flat"] .transportbar .tp{gap:6px}
+}
+@media (max-width:420px){
+  html[data-uistyle="flat"] .transportbar{--tb:30px;--tb-play:38px;--tb-grp:6px}
+  html[data-uistyle="flat"] .transportbar .tp__side,
+  html[data-uistyle="flat"] .transportbar .tp__mid{padding:2px}
+}
+
+/* ---------- 31. Panel bawah: layout lengkap seperti gambar referensi (tanpa bagian atas) ----------
+   [kartu instrumen] [alat: pilih / gambar / potong] [undo / redo] [loop · mundur · PLAY · maju] [pitch · titik tiga · M] ... [meter] [mixer] */
+html[data-uistyle="flat"] .transportbar .tp{justify-content:flex-start;gap:10px}
+html[data-uistyle="flat"] .transportbar .tp__tools{display:flex;order:1;align-items:center;gap:var(--tb-gap);padding:3px;background:var(--flat-dk-well);border-radius:var(--flat-dk-r)}
+html[data-uistyle="flat"] .transportbar .tp__side--r{order:2}
+html[data-uistyle="flat"] .transportbar .tp__mid{order:3}
+html[data-uistyle="flat"] .transportbar .tp__side--l{order:4}
+html[data-uistyle="flat"] .transportbar .tp__meter{order:5}
+html[data-uistyle="flat"] .transportbar .tp__mixer{order:6}
+
+/* urutan di grup transport: loop, PLAY, mundur, maju */
+html[data-uistyle="flat"] .transportbar .tp__loop{display:grid;order:0}
+html[data-uistyle="flat"] .transportbar .tp__mid .play{order:1}
+html[data-uistyle="flat"] .transportbar .tp__mid .rewind{order:2}
+html[data-uistyle="flat"] .transportbar .tp__mid .forward{order:3}
+
+/* ikon tombol alat */
+html[data-uistyle="flat"] .transportbar .tool-btn svg{display:block;width:18px;height:18px}
+/* alat terpilih = abu terang (seperti tombol Pilih di referensi); loop menyala = oranye */
+html[data-uistyle="flat"] .transportbar .tool-btn.is-on,
+html[data-uistyle="flat"] .transportbar .tool-btn.is-on:hover:not(:disabled){background:#4b4844;color:#fff}
+html[data-uistyle="flat"] .transportbar .tp__loop.is-on,
+html[data-uistyle="flat"] .transportbar .tp__loop.is-on:hover:not(:disabled){background:var(--flat-dk-accent);color:var(--flat-pal-ink)}
+
+/* meter master: layar gelap dengan dua batang (kiri / kanan) hijau -> oranye -> merah */
+html[data-uistyle="flat"] .transportbar .tp__meter{display:flex;flex-direction:column;justify-content:center;gap:5px;
+  flex:0 1 150px;min-width:70px;height:var(--tb-play);margin-left:auto;padding:0 12px;box-sizing:border-box;
+  background:var(--flat-dk-well);border-radius:var(--flat-dk-r)}
+html[data-uistyle="flat"] .transportbar .tp__meter i{display:block;position:relative;height:6px;border-radius:2px;background:var(--flat-pal-dock-btn);overflow:hidden}
+html[data-uistyle="flat"] .transportbar .tp__meter b{position:absolute;inset:0;clip-path:inset(0 100% 0 0);
+  background:linear-gradient(90deg,var(--flat-pal-ok) 0 72%,var(--flat-pal-orange) 72% 90%,var(--flat-pal-rec) 90% 100%)}
+
+/* tombol mixer di kanan */
+html[data-uistyle="flat"] .transportbar .tp__mixer{display:grid;order:6;width:var(--tb-play);height:var(--tb-play);
+  background:var(--flat-dk-well);border:0;border-radius:var(--flat-dk-r)}
+html[data-uistyle="flat"] .transportbar .tp__mixer svg{display:block;width:20px;height:20px}
+html[data-uistyle="flat"] .transportbar .tp__mixer:hover:not(:disabled){background:var(--flat-dk-hi)}
+
+/* ruang untuk panah buka / tutup panel di tepi kanan */
+html[data-uistyle="flat"] .transportbar .tp-dock{padding-right:52px}
+
+@media (max-width:1020px){
+  html[data-uistyle="flat"] .transportbar .tp__meter{display:none}
+  html[data-uistyle="flat"] .transportbar .tp__mixer{margin-left:auto}
+}
+@media (max-width:720px){
+  html[data-uistyle="flat"] .transportbar .tp__tools,
+  html[data-uistyle="flat"] .transportbar .tp__mixer{display:none}
+  html[data-uistyle="flat"] .transportbar .tp{justify-content:center}
+  html[data-uistyle="flat"] .transportbar .tp-dock{padding-right:44px}
+}
+@media (max-width:520px){
+  html[data-uistyle="flat"] .transportbar .tp__loop{display:none}
+}

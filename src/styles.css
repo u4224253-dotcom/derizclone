@@ -2306,3 +2306,8 @@ body.is-pdragging,body.is-pdragging *{cursor:grabbing!important;user-select:none
 /* tombol rahasia pindah Gaya UI (Default <-> Flat): tak terlihat, pojok kanan-bawah halaman utama Menu (area kosong di bawah daftar kategori); hanya aktif di halaman utama supaya tidak menutupi tombol di halaman lain */
 .mp__uisw{position:absolute;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 110px);width:64px;height:64px;padding:0;border:0;background:transparent;opacity:0;pointer-events:auto;z-index:3;cursor:default;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .mp__panel:has(.mp__page[data-page="home"][hidden]) .mp__uisw{display:none}
+
+/* kartu instrumen di panel bawah: hanya dipakai Gaya UI Flat (lihat flat-ui.css bagian 30) */
+.tp__inst{display:none}
+/* elemen tambahan panel bawah Gaya Flat (alat, loop, meter, mixer): tersembunyi di mode Default */
+.tp__tools,.tp__loop,.tp__meter,.tp__mixer{display:none}

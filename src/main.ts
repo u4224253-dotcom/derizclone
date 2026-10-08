@@ -39,6 +39,7 @@ import { slideSource, glideBeats } from './note-slide';
 import { velAlpha } from './velocity';
 import { DEMO, LIMITS, demoNotice, demoMount } from './demo';
 import { initTutorial } from './tutorial';
+import { initDockMeter } from './dock-inst';
 const demoTrackFull = (ins) => { if (!DEMO) return false; const cs = [...document.querySelectorAll('.trkcard-wrap')]; if (cs.length >= LIMITS.tracks) { demoNotice('track'); return true; } if (ins === 'DERIZ' && cs.filter(c => c.dataset.ins === 'DERIZ').length >= LIMITS.deriz) { demoNotice('deriz'); return true; } if (ins === 'DERIZ' && fxRack.derizCount() >= LIMITS.derizPlugins) { demoNotice('derizplug'); return true; } return false; };   // DEMO: batas jumlah track / DERIZ
 import { openPianoRoll, closePianoRoll, isPianoRollOpen, setPianoRollPlayhead, setPianoRollChangeHandler, setPianoRollPreviewHandler, setPianoRollSeekHandler, getNoteColor, setNoteColor, getPianoRollNotes, setPianoRollNotes, copyPianoRollNotes, trimPianoRollNotes, shiftPianoRollNotes, pianoRollExtraKeys, dropPianoRollNotesOf, clearPianoRollNotes, PR_BEATS } from './piano-roll';
 // Tahap 1 (porting tanpa perubahan perilaku): logika dipindah apa adanya dari web-daw.html.
@@ -2358,6 +2359,7 @@ const contentEndBar = () => {   // ujung kanan clip / pattern paling akhir di ti
 };
 // SPECTRUM: membaca keluaran master yang sama (setelah pengaman clipping), jadi gambarnya persis yang terdengar
 setSpectrumBridge({tap: () => { audio(); return guardOut; }});
+initDockMeter(() => guardOut);   // meter master di panel bawah (Gaya Flat)
 restoreSpectrum();   // kalau terakhir dinyalakan di Pengaturan, strip muncul lagi setelah sentuhan pertama
 let expSaved = null;
 setExportIO({
