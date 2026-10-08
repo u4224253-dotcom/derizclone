@@ -23,20 +23,6 @@ if (list) {
 }
 sync();
 
-// ---------- Tombol alat & loop (Gaya Flat): hanya status tampilan + event; logika editor boleh mendengarkannya ----------
-// 'dock-tool' detail {tool: 'select' | 'draw' | 'cut'};  'dock-loop' detail {on: boolean}
-const tools = Array.from(document.querySelectorAll<HTMLButtonElement>('.tool-btn'));
-tools.forEach(b => b.addEventListener('click', () => {
-  tools.forEach(o => { const on = o === b; o.classList.toggle('is-on', on); o.setAttribute('aria-pressed', String(on)); });
-  document.dispatchEvent(new CustomEvent('dock-tool', { detail: { tool: b.dataset.tool } }));
-}));
-const loopBtn = document.getElementById('btnLoop');
-loopBtn?.addEventListener('click', () => {
-  const on = loopBtn.getAttribute('aria-pressed') !== 'true';
-  loopBtn.setAttribute('aria-pressed', String(on)); loopBtn.classList.toggle('is-on', on);
-  document.dispatchEvent(new CustomEvent('dock-loop', { detail: { on } }));
-});
-
 // ---------- Tombol mixer: membuka / menutup panel efek (sama dengan panah di tepi panel efek) ----------
 document.getElementById('btnMixer')?.addEventListener('click', () => document.getElementById('fxToggle')?.click());
 

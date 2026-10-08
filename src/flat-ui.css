@@ -988,29 +988,20 @@ html[data-uistyle="flat"] .transportbar.is-collapsed .kbd-toggle{background:var(
   html[data-uistyle="flat"] .transportbar .tp__mid{padding:2px}
 }
 
-/* ---------- 31. Panel bawah: layout lengkap seperti gambar referensi (tanpa bagian atas) ----------
-   [kartu instrumen] [alat: pilih / gambar / potong] [undo / redo] [loop · mundur · PLAY · maju] [pitch · titik tiga · M] ... [meter] [mixer] */
+/* ---------- 31. Panel bawah: hanya tombol yang punya fungsi ----------
+   [kartu instrumen] [undo / redo] [mundur · PLAY · maju] [pitch · titik tiga · M] ... [meter] [mixer] */
 html[data-uistyle="flat"] .transportbar .tp{justify-content:flex-start;gap:10px}
-html[data-uistyle="flat"] .transportbar .tp__tools{display:flex;order:1;align-items:center;gap:var(--tb-gap);padding:3px;background:var(--flat-dk-well);border-radius:var(--flat-dk-r)}
-html[data-uistyle="flat"] .transportbar .tp__side--r{order:2}
-html[data-uistyle="flat"] .transportbar .tp__mid{order:3}
-html[data-uistyle="flat"] .transportbar .tp__side--l{order:4}
-html[data-uistyle="flat"] .transportbar .tp__meter{order:5}
-html[data-uistyle="flat"] .transportbar .tp__mixer{order:6}
+html[data-uistyle="flat"] .transportbar .tp__side,
+html[data-uistyle="flat"] .transportbar .tp__mid{flex:none}   /* grup tidak boleh menyempit / saling menumpuk */
+html[data-uistyle="flat"] .transportbar .tp__side--r{order:1}
+html[data-uistyle="flat"] .transportbar .tp__mid{order:2}
+html[data-uistyle="flat"] .transportbar .tp__side--l{order:3}
+html[data-uistyle="flat"] .transportbar .tp__meter{order:4}
+html[data-uistyle="flat"] .transportbar .tp__mixer{order:5}
 
-/* urutan di grup transport: loop, PLAY, mundur, maju */
-html[data-uistyle="flat"] .transportbar .tp__loop{display:grid;order:0}
-html[data-uistyle="flat"] .transportbar .tp__mid .play{order:1}
-html[data-uistyle="flat"] .transportbar .tp__mid .rewind{order:2}
-html[data-uistyle="flat"] .transportbar .tp__mid .forward{order:3}
-
-/* ikon tombol alat */
-html[data-uistyle="flat"] .transportbar .tool-btn svg{display:block;width:18px;height:18px}
-/* alat terpilih = abu terang (seperti tombol Pilih di referensi); loop menyala = oranye */
-html[data-uistyle="flat"] .transportbar .tool-btn.is-on,
-html[data-uistyle="flat"] .transportbar .tool-btn.is-on:hover:not(:disabled){background:#4b4844;color:#fff}
-html[data-uistyle="flat"] .transportbar .tp__loop.is-on,
-html[data-uistyle="flat"] .transportbar .tp__loop.is-on:hover:not(:disabled){background:var(--flat-dk-accent);color:var(--flat-pal-ink)}
+/* kartu instrumen mengalah (menyempit) lebih dulu kalau ruang habis */
+html[data-uistyle="flat"] .transportbar .tp__inst{flex:0 1 220px;min-width:56px}
+html[data-uistyle="flat"] .transportbar .tp-dock{overflow:hidden}
 
 /* meter master: layar gelap dengan dua batang (kiri / kanan) hijau -> oranye -> merah */
 html[data-uistyle="flat"] .transportbar .tp__meter{display:flex;flex-direction:column;justify-content:center;gap:5px;
@@ -1021,7 +1012,7 @@ html[data-uistyle="flat"] .transportbar .tp__meter b{position:absolute;inset:0;c
   background:linear-gradient(90deg,var(--flat-pal-ok) 0 72%,var(--flat-pal-orange) 72% 90%,var(--flat-pal-rec) 90% 100%)}
 
 /* tombol mixer di kanan */
-html[data-uistyle="flat"] .transportbar .tp__mixer{display:grid;order:6;width:var(--tb-play);height:var(--tb-play);
+html[data-uistyle="flat"] .transportbar .tp__mixer{display:grid;flex:none;width:var(--tb-play);height:var(--tb-play);
   background:var(--flat-dk-well);border:0;border-radius:var(--flat-dk-r)}
 html[data-uistyle="flat"] .transportbar .tp__mixer svg{display:block;width:20px;height:20px}
 html[data-uistyle="flat"] .transportbar .tp__mixer:hover:not(:disabled){background:var(--flat-dk-hi)}
@@ -1034,11 +1025,10 @@ html[data-uistyle="flat"] .transportbar .tp-dock{padding-right:52px}
   html[data-uistyle="flat"] .transportbar .tp__mixer{margin-left:auto}
 }
 @media (max-width:720px){
-  html[data-uistyle="flat"] .transportbar .tp__tools,
   html[data-uistyle="flat"] .transportbar .tp__mixer{display:none}
   html[data-uistyle="flat"] .transportbar .tp{justify-content:center}
   html[data-uistyle="flat"] .transportbar .tp-dock{padding-right:44px}
 }
-@media (max-width:520px){
-  html[data-uistyle="flat"] .transportbar .tp__loop{display:none}
+@media (max-width:420px){
+  html[data-uistyle="flat"] .transportbar .tp-dock{padding-right:50px}
 }
